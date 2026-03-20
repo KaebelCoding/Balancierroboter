@@ -77,8 +77,8 @@ void setup() {
 }
 
 void loop() {
-  joystickReadingX = analogRead(PinJoystickX);
-  joystickReadingY = analogRead(PinJoystickY);
+  joystickReadingX = analogRead(PinJoystickX); // (brauche ich diese Zwischenspeicher-Variable wirklich?)
+  joystickReadingY = analogRead(PinJoystickY); // (brauche ich diese Zwischenspeicher-Variable wirklich?)
   measureX();
   measureY();
 
