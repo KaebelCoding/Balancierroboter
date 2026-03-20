@@ -13,7 +13,7 @@ using namespace MDO::ESP32ServoController;
 #define PinJoystickX 39 // Inputs - Joystick
 #define PinJoystickY 36
 #define PinX1 13        // Inputs - Touchscreen
-#define PinX2 14
+#define PinX2 14        // (is x1 the signal and x2 the ground/vcc?? -> maybe better naming possible)
 #define PinY1 12
 #define PinY2 27
 #define PinServoX 26    // Outputs - Servo
