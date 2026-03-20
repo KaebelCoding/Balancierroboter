@@ -93,12 +93,12 @@ void loop() {
     case 0:  //Manual Controll
       servoAngleX = joystickAngleX;
       servoAngleY = joystickAngleY;
-      Serial.print (" Mode1");
+      Serial.print (" Modus 1 - Joysticksteuerung");
       break;
     case 1:
       servoAngleX = PIDX.run(posX, joystickAngleX * 3);  //  output = myPID.run(input, setpoint);
       servoAngleY = PIDY.run(posY, joystickAngleY * 3);
-      Serial.print (" Mode2");
+      Serial.print (" Modus 2 - Regelbetrieb");
       //Serial.print(millis());
       /*
       Serial.print("\t");
@@ -110,7 +110,7 @@ void loop() {
       */
       break;
     case 2:  //off
-      Serial.print (" Mode3");
+      Serial.print (" Modus 3 - Aus/An schalten");
       servoAngleX = 0;
       servoAngleY = 0;
       break;
