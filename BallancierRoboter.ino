@@ -66,11 +66,11 @@ void setup() {
 
   ServoFactoryDecorator oFactoryDecorator(oTimerChannelFactory);  //let this ServoFactoryDecorator define the servo frequency to use and such
   if (!ServoX.begin(oFactoryDecorator, PinServoX)) {              //3rd parameter is the default angle to start from: 90 degrees in this case
-    Serial.println("  failed to init the servo..");
+    Serial.println("  failed to init the x-servo..");
     return;
   }
   if (!ServoY.begin(oFactoryDecorator, PinServoY)) {  //3rd parameter is the default angle to start from: 90 degrees in this case
-    Serial.println("  failed to init the servo..");
+    Serial.println("  failed to init the y-servo..");
     return;
   }
   Serial.begin(115200);
