@@ -4,7 +4,7 @@
 using namespace MDO::ESP32ServoController;
 
 // === uC-Pin definition ===
-#define PinButton1 15      // Inputs - Interface
+#define PinButton1 15   // Inputs - Interface
 #define PinButton2 4
 #define PinButton3 0
 #define PinPotiP 32
@@ -12,7 +12,7 @@ using namespace MDO::ESP32ServoController;
 #define PinPotiD 34
 #define PinJoystickX 39 // Inputs - Joystick
 #define PinJoystickY 36
-#define PinX1 13           // Inputs - Touchscreen
+#define PinX1 13        // Inputs - Touchscreen
 #define PinX2 14
 #define PinY1 12
 #define PinY2 27
