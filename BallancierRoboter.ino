@@ -3,8 +3,8 @@
 
 using namespace MDO::ESP32ServoController;
 
-// Input uC-Pins
-#define Button1 15
+// === uC-Pin definition ===
+#define Button1 15      // Inputs
 #define Button2 4
 #define Button3 0
 #define PinPotiP 32
@@ -16,8 +16,7 @@ using namespace MDO::ESP32ServoController;
 #define X2 14
 #define Y1 12
 #define Y2 27
-// Output uC-Pins
-#define PinServoX 26
+#define PinServoX 26    // Outputs
 #define PinServoY 25
 // #define X1 12
 // #define X2 27
