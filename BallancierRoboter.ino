@@ -3,24 +3,26 @@
 
 using namespace MDO::ESP32ServoController;
 
-#define PinJoyStickX 39
-#define PinJoyStickY 36
+// Input uC-Pins
+#define Button1 15
+#define Button2 4
+#define Button3 0
 #define PinPotiP 32
 #define PinPotiI 35
 #define PinPotiD 34
+#define PinJoystickX 39
+#define PinJoystickY 36
+#define X1 13
+#define X2 14
+#define Y1 12
+#define Y2 27
+// Output uC-Pins
 #define PinServoX 26
 #define PinServoY 25
 // #define X1 12
 // #define X2 27
 // #define Y1 13
 // #define Y2 14
-#define X1 13
-#define X2 14
-#define Y1 12
-#define Y2 27
-#define Button1 15
-#define Button2 4
-#define Button3 0
 
 uint8_t mode = 0;
 long every100ms = 100;
@@ -76,8 +78,8 @@ void setup() {
 }
 
 void loop() {
-  joystickReadingX = analogRead(PinJoyStickX);
-  joystickReadingY = analogRead(PinJoyStickY);
+  joystickReadingX = analogRead(PinJoystickX);
+  joystickReadingY = analogRead(PinJoystickY);
   measureX();
   measureY();
 
