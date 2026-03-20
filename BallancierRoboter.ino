@@ -82,8 +82,8 @@ void loop() {
   measureX();
   measureY();
 
-  joystickAngleX = (joystickOffsetX - joystickReadingX) / 30.00;
-  joystickAngleY = (joystickReadingY - joystickOffsetY) / 30.00;
+  joystickAngleX = (joystickOffsetX - joystickReadingX) / 30.00; // (der Joystick reagiert aktuell noch sehr grob)
+  joystickAngleY = (joystickReadingY - joystickOffsetY) / 30.00; // (vlt. kann man ihn hier feiner einstellen)
   //Serial.print("X ");
   //Serial.print(joystickAngleX);
   //Serial.print("\t Y ");
