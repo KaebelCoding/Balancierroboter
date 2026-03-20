@@ -4,24 +4,24 @@
 using namespace MDO::ESP32ServoController;
 
 // === uC-Pin definition ===
-#define Button1 15      // Inputs
-#define Button2 4
-#define Button3 0
+#define PinButton1 15      // Inputs - Interface
+#define PinButton2 4
+#define PinButton3 0
 #define PinPotiP 32
 #define PinPotiI 35
 #define PinPotiD 34
-#define PinJoystickX 39
+#define PinJoystickX 39 // Inputs - Joystick
 #define PinJoystickY 36
-#define X1 13
-#define X2 14
-#define Y1 12
-#define Y2 27
-#define PinServoX 26    // Outputs
+#define PinX1 13           // Inputs - Touchscreen
+#define PinX2 14
+#define PinY1 12
+#define PinY2 27
+#define PinServoX 26    // Outputs - Servo
 #define PinServoY 25
-// #define X1 12
-// #define X2 27
-// #define Y1 13
-// #define Y2 14
+// #define PinX1 12
+// #define PinX2 27
+// #define PinY1 13
+// #define PinY2 14
 
 uint8_t mode = 0;
 long every100ms = 100;
@@ -49,9 +49,9 @@ AdvancedPID PIDX(Kp, Ki, Kd, Kb);
 AdvancedPID PIDY(Kp, Ki, Kd, Kb);
 
 void setup() {
-  pinMode(Button1, INPUT_PULLUP);
-  pinMode(Button2, INPUT_PULLUP);
-  pinMode(Button3, INPUT_PULLUP);
+  pinMode(PinButton1, INPUT_PULLUP);
+  pinMode(PinButton2, INPUT_PULLUP);
+  pinMode(PinButton3, INPUT_PULLUP);
   pinMode(PinPotiP, INPUT);
   pinMode(PinPotiI, INPUT);
   pinMode(PinPotiD, INPUT);
@@ -140,15 +140,15 @@ void loop() {
     PIDY.setTunings(Kp, Ki, Kd);
 
     // Auslesen des Interfaces
-    if (not digitalRead(Button1)) {
+    if (not digitalRead(PinButton1)) {
       mode = 0;
       //Serial.println("Mode 0");
     }
-    if (not digitalRead(Button2)) {
+    if (not digitalRead(PinButton2)) {
       mode = 1;
       //Serial.println("Mode 1");
     }
-    if (not digitalRead(Button3)) {
+    if (not digitalRead(PinButton3)) {
       mode = 2;
       //Serial.println("Mode 2");
     }
@@ -156,17 +156,17 @@ void loop() {
 }
 
 void measureX() {
-  pinMode(Y1, INPUT);
-  pinMode(Y2, INPUT);
-  digitalWrite(Y2, LOW);
+  pinMode(PinY1, INPUT);
+  pinMode(PinY2, INPUT);
+  digitalWrite(PinY2, LOW);
 
-  pinMode(X1, OUTPUT);
-  digitalWrite(X1, HIGH);
+  pinMode(PinX1, OUTPUT);
+  digitalWrite(PinX1, HIGH);
   delay(1); // in ms
-  pinMode(X2, OUTPUT);
-  digitalWrite(X2, LOW);
+  pinMode(PinX2, OUTPUT);
+  digitalWrite(PinX2, LOW);
   delay(2); // in ms
-  touchX = analogRead(Y1);
+  touchX = analogRead(PinY1);
   //Serial.print(touchX);
   //Serial.print("\t");
 
@@ -184,17 +184,17 @@ void measureX() {
 }
 
 void measureY() {
-  pinMode(X1, INPUT);
-  pinMode(X2, INPUT);
-  digitalWrite(X2, LOW);
-  pinMode(Y1, OUTPUT);
-  digitalWrite(Y1, HIGH);
+  pinMode(PinX1, INPUT);
+  pinMode(PinX2, INPUT);
+  digitalWrite(PinX2, LOW);
+  pinMode(PinY1, OUTPUT);
+  digitalWrite(PinY1, HIGH);
   delay(1); // in ms
-  pinMode(Y2, OUTPUT);
-  digitalWrite(Y2, LOW);
+  pinMode(PinY2, OUTPUT);
+  digitalWrite(PinY2, LOW);
   delay(2); // in ms
 
-  touchY = analogRead(X1);
+  touchY = analogRead(PinX1);
   /*Serial.print("\t");
   Serial.print(touchY);
   Serial.print("\t");
