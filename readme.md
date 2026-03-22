@@ -4,7 +4,7 @@ Dieses Projekt ist der Quellcode für einen Balancierroboter mit einem Ball auf 
 
 ![](images/Balancierroboter.jpg)
 
-## Verwendete Hardware
+### Verwendete Hardware
 
 * ESP32-WROOM-32A
 * 2x Servomotor
@@ -17,7 +17,7 @@ Dieses Projekt ist der Quellcode für einen Balancierroboter mit einem Ball auf 
 
 ### Knopf
 
-Control the position of a RC (hobby) [servo motor](http://en.wikipedia.org/wiki/Servo_motor#RC_servos) with your Arduino and a potentiometer.
+Steuere die Position eines [Hobby Servo's](http://en.wikipedia.org/wiki/Servo_motor#RC_servos) mit deinem Arduino und einem Potentiometer.
 
 Dieses Beispiel verwendet die arduino "Servo"-Bibliothek.
 
