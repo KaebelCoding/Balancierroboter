@@ -29,7 +29,7 @@ The potentiometer should be wired so that its two outer pins are connected to po
 
 ![Servosteuerung Kabelanordnung](images/Servosteuerung_Kabelanordnung.jpg)
 
-(Die Schaltbilder wurden mit Fritzing erstellt. [Fritzing.org](http://fritzing.org/))
+(Die Schaltbilder wurden mit [Fritzing.org](http://fritzing.org/) erstellt.)
 
 
 ### Schaltplan
