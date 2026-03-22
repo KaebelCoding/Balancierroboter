@@ -4,13 +4,7 @@ Dieses Projekt ist der Quellcode für einen Balancierroboter mit einem Ball auf 
 
 ![](images/Balancierroboter.jpg)
 
-## Knopf
-
-Control the position of a RC (hobby) [servo motor](http://en.wikipedia.org/wiki/Servo_motor#RC_servos) with your Arduino and a potentiometer.
-
-This example makes use of the Arduino `Servo` library.
-
-### Verwendete Hardware
+## Verwendete Hardware
 
 * ESP32-WROOM-32A
 * 2x Servomotor
@@ -18,6 +12,14 @@ This example makes use of the Arduino `Servo` library.
 * hook-up wires
 
 ![](images/Pin-Belegung2.jpg)
+
+## Servobeschaltung
+
+### Knopf
+
+Control the position of a RC (hobby) [servo motor](http://en.wikipedia.org/wiki/Servo_motor#RC_servos) with your Arduino and a potentiometer.
+
+Dieses Beispiel verwendet die arduino "Servo"-Bibliothek.
 
 ### Zusammenschaltung
 
@@ -27,7 +29,8 @@ The potentiometer should be wired so that its two outer pins are connected to po
 
 ![](images/knob_BB.png)
 
-(Images developed using Fritzing. For more circuit examples, see the [Fritzing project page](http://fritzing.org/projects/))
+(Die Schaltbilder wurden mit Fritzing erstellt. [Fritzing.org](http://fritzing.org/))
+
 
 ### Schaltkreis
 
