@@ -19,7 +19,7 @@ This example makes use of the Arduino `Servo` library.
 
 ### ESP32-WROOM-32U Pin-Belegung
 
-![](images/Pin-Belegung 2.jpg)
+![](images/Pin-Belegung2.jpg)
 
 ### Zusammenschaltung
 
