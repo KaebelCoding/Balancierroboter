@@ -17,8 +17,6 @@ This example makes use of the Arduino `Servo` library.
 * 2x 10k Ohm Potentiometer
 * hook-up wires
 
-### ESP32-WROOM-32U Pin-Belegung
-
 ![](images/Pin-Belegung2.jpg)
 
 ### Zusammenschaltung
