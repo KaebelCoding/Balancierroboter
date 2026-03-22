@@ -27,11 +27,11 @@ Servo motors have three wires: power, ground, and signal. The power wire is typi
 
 The potentiometer should be wired so that its two outer pins are connected to power (+5V) and ground, and its middle pin is connected to analog input 0 on the board.
 
-![](images/knob_BB.png)
+![Servosteuerung Kabelanordnung](images/Servosteuerung_Kabelanordnung.jpg)
 
 (Die Schaltbilder wurden mit Fritzing erstellt. [Fritzing.org](http://fritzing.org/))
 
 
-### Schaltkreis
+### Schaltplan
 
-![](images/knob_schem.png)
+![Servosteuerung Schaltplan](images/Servosteuerung_Schaltplan.jpg)
