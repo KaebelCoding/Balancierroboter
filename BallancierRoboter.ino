@@ -5,19 +5,19 @@ using namespace MDO::ESP32ServoController;
 
 // === uC-Pin definition ===
 #define PinButton1 15   // Inputs - Interface
-#define PinButton2 4
+#define PinButton2 2
 #define PinButton3 0
-#define PinPotiP 32
-#define PinPotiI 35
-#define PinPotiD 34
+#define PinPotiP 16
+#define PinPotiI 17
+#define PinPotiD 5
 #define PinJoystickX 39 // Inputs - Joystick
 #define PinJoystickY 36
-#define PinX1 13        // Inputs - Touchscreen
-#define PinX2 14        // (is x1 the signal and x2 the ground/vcc?? -> maybe better naming possible)
-#define PinY1 12
-#define PinY2 27
+#define PinX1 33        // Inputs - Touchscreen
+#define PinX2 35        // (is x1 the signal and x2 the ground/vcc?? -> maybe better naming possible)
+#define PinY1 32
+#define PinY2 34
 #define PinServoX 26    // Outputs - Servo
-#define PinServoY 25
+#define PinServoY 27
 // #define PinX1 12
 // #define PinX2 27
 // #define PinY1 13
