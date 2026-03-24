@@ -1,2 +1,2 @@
 git pull
-pause >nul
+pause
