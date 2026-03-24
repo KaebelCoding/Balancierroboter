@@ -159,7 +159,7 @@ void loop() {
 
 // FUNKTIONEN ------------------------------------------------------------------------------------
 
-void measureTouchscreenXAxis() {          // Sensorposition X
+void measureTouchscreenXAxis() {
   pinMode(PinY1, INPUT);
   pinMode(PinY2, INPUT);
   digitalWrite(PinY2, LOW);
