@@ -13,7 +13,7 @@ using namespace MDO::ESP32ServoController;
 #define PinPotiD 5
 #define PinJoystickX 39 // Inputs - Joystick
 #define PinJoystickY 36
-#define PinX1 33        // Inputs - Touchscreen
+#define PinX1 33        // Inputs - Touchscreensensor
 #define PinX2 35        // (is x1 the signal and x2 the ground/vcc?? -> maybe better naming possible)
 #define PinY1 32
 #define PinY2 34
@@ -25,7 +25,7 @@ long every100ms = 100;
 
 int joystickReadingX;
 int joystickReadingY;
-int joystickOffsetX = 1840;  //Position bei keiner Auslenkung
+int joystickOffsetX = 1840;  //Joystickposition bei keiner Auslenkung
 int joystickOffsetY = 1821;
 float joystickAngleX;
 float joystickAngleY;
@@ -33,7 +33,7 @@ float joystickAngleY;
 ServoController ServoX, ServoY;  // create servo object to control a servo
 float servoAngleX;
 float servoAngleY; 
-float servoOffsetX = 85.0; //Positionen bei ungeneigter Ebene
+float servoOffsetX = 85.0; //Servopositionen bei ungeneigter Ebene
 float servoOffsetY = 90.0;
 
 int touchX = 0, touchY = 0, touchXOld = -1, touchYOld = -1;  
@@ -49,6 +49,7 @@ AdvancedPID PIDX(Kp, Ki, Kd, Kb);
 AdvancedPID PIDY(Kp, Ki, Kd, Kb);
 
 void setup() {
+  
   pinMode(PinButtonPower, INPUT_PULLUP);
   pinMode(PinButtonRegelbetrieb, INPUT_PULLUP);
   pinMode(PinButtonJoysticksteuerung, INPUT_PULLUP);
@@ -73,12 +74,13 @@ void setup() {
     Serial.println("  failed to init the y-servo..");
     return;
   }
-  Serial.begin(115200);
+  Serial.begin(115200); // Baud Rate, größer als 9600, weil Joystick sonst verzögert reagiert 
 }
 
 // BETRIEB ----------------------------------------------------------------------------------------
 
 void loop() {
+  
   joystickReadingX = analogRead(PinJoystickX); // (brauche ich diese Zwischenspeicher-Variable wirklich?)
   joystickReadingY = analogRead(PinJoystickY); // (brauche ich diese Zwischenspeicher-Variable wirklich?)
   measureTouchscreenXAxis();
@@ -159,7 +161,7 @@ void loop() {
 
 // FUNKTIONEN ------------------------------------------------------------------------------------
 
-void measureTouchscreenXAxis() {          // Sensorposition X
+void measureTouchscreenXAxis() {          
   pinMode(PinY1, INPUT);
   pinMode(PinY2, INPUT);
   digitalWrite(PinY2, LOW);
