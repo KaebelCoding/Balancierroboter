@@ -1,3 +1,4 @@
+// INITIALISIERUNG --------------------------------------------------------------------------------
 #include <ESP32ServoController.h>
 #include "AdvancedPID.h"
 
@@ -24,15 +25,18 @@ long every100ms = 100;
 
 int joystickReadingX;
 int joystickReadingY;
-int joystickOffsetX = 1840;
+int joystickOffsetX = 1840;  //Position bei keiner Auslenkung
 int joystickOffsetY = 1821;
 float joystickAngleX;
 float joystickAngleY;
 
 ServoController ServoX, ServoY;  // create servo object to control a servo
-float servoAngleX, servoAngleY, servoOffsetX = 85.0, servoOffsetY = 90.0;
+float servoAngleX;
+float servoAngleY; 
+float servoOffsetX = 85.0; //Positionen bei ungeneigter Ebene
+float servoOffsetY = 90.0;
 
-int touchX = 0, touchY = 0, touchXOld = -1, touchYOld = -1;
+int touchX = 0, touchY = 0, touchXOld = -1, touchYOld = -1;  
 uint32_t touchXTimer = 0, touchYTimer;
 float posX = 0, posY = 0;
 
@@ -72,6 +76,8 @@ void setup() {
   Serial.begin(115200);
 }
 
+// BETRIEB ----------------------------------------------------------------------------------------
+
 void loop() {
   joystickReadingX = analogRead(PinJoystickX); // (brauche ich diese Zwischenspeicher-Variable wirklich?)
   joystickReadingY = analogRead(PinJoystickY); // (brauche ich diese Zwischenspeicher-Variable wirklich?)
@@ -91,7 +97,7 @@ void loop() {
       servoAngleY = joystickAngleY;
       Serial.print (" Modus 1 - Joysticksteuerung");
       break;
-    case 1:
+    case 1:  // geregelter Betrieb
       servoAngleX = PIDX.run(posX, joystickAngleX * 3);  //  output = myPID.run(input, setpoint);
       servoAngleY = PIDY.run(posY, joystickAngleY * 3);
       Serial.print (" Modus 2 - Regelbetrieb");
@@ -151,7 +157,9 @@ void loop() {
   }
 }
 
-void measureX() {
+// FUNKTIONEN ------------------------------------------------------------------------------------
+
+void measureX() {          // Sensorposition X
   pinMode(PinY1, INPUT);
   pinMode(PinY2, INPUT);
   digitalWrite(PinY2, LOW);
@@ -179,7 +187,7 @@ void measureX() {
   Serial.print(posX);
 }
 
-void measureY() {
+void measureY() {            // Sensorposition Y 
   pinMode(PinX1, INPUT);
   pinMode(PinX2, INPUT);
   digitalWrite(PinX2, LOW);
