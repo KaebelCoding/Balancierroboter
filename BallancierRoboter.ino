@@ -18,10 +18,6 @@ using namespace MDO::ESP32ServoController;
 #define PinY2 34
 #define PinServoX 26    // Outputs - Servo
 #define PinServoY 27
-// #define PinX1 12
-// #define PinX2 27
-// #define PinY1 13
-// #define PinY2 14
 
 uint8_t mode = 0;
 long every100ms = 100;
