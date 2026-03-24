@@ -171,8 +171,8 @@ void measureTouchscreenXAxis() {          // Sensorposition X
   digitalWrite(PinX2, LOW);
   delay(2); // in ms
   touchX = analogRead(PinY1);
-  //Serial.print(touchX);
-  //Serial.print("\t");
+  Serial.print(touchX);
+  Serial.print("\t");
 
   if (abs(touchX - touchXOld) > 100 && millis() < touchXTimer) {
     //Serial.print("400");
@@ -199,10 +199,10 @@ void measureTouchscreenYAxis() {
   delay(2); // in ms
 
   touchY = analogRead(PinX1);
-  /*Serial.print("\t");
+  //Serial.print("\t");
   Serial.print(touchY);
   Serial.print("\t");
-  */
+  
   if (abs(touchY - touchYOld) > 100 && millis() < touchYTimer) {
     //Serial.print("500");
   } else {
