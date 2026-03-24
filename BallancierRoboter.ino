@@ -5,9 +5,9 @@
 using namespace MDO::ESP32ServoController;
 
 // === uC-Pin definition ===
-#define PinButton1 0    
-#define PinButton2 2
-#define PinButton3 15  
+#define PinButtonPower 0    
+#define PinButtonRegelbetrieb 2
+#define PinButtonJoysticksteuerung 15  
 #define PinPotiP 16
 #define PinPotiI 17
 #define PinPotiD 5
@@ -49,9 +49,9 @@ AdvancedPID PIDX(Kp, Ki, Kd, Kb);
 AdvancedPID PIDY(Kp, Ki, Kd, Kb);
 
 void setup() {
-  pinMode(PinButton1, INPUT_PULLUP);
-  pinMode(PinButton2, INPUT_PULLUP);
-  pinMode(PinButton3, INPUT_PULLUP);
+  pinMode(PinButtonPower, INPUT_PULLUP);
+  pinMode(PinButtonRegelbetrieb, INPUT_PULLUP);
+  pinMode(PinButtonJoysticksteuerung, INPUT_PULLUP);
   pinMode(PinPotiP, INPUT);
   pinMode(PinPotiI, INPUT);
   pinMode(PinPotiD, INPUT);
@@ -142,17 +142,17 @@ void loop() {
     PIDY.setTunings(Kp, Ki, Kd);
 
     // Auslesen des Interfaces
-    if (not digitalRead(PinButton1)) {
+    if (not digitalRead(PinButtonPower)) {
       mode = 0;
-      //Serial.println("Mode 0");
+      Serial.println("Modus: An/Aus");
     }
-    if (not digitalRead(PinButton2)) {
+    if (not digitalRead(PinButtonRegelbetrieb)) {
       mode = 1;
-      //Serial.println("Mode 1");
+      Serial.println("Modus: Regelbetrieb");
     }
-    if (not digitalRead(PinButton3)) {
+    if (not digitalRead(PinButtonJoysticksteuerung)) {
       mode = 2;
-      //Serial.println("Mode 2");
+      Serial.println("Modus: Joysticksteuerung");
     }
   }
 }
