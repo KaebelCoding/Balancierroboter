@@ -13,12 +13,12 @@ using namespace MDO::ESP32ServoController;
 #define PinPotiD 5
 #define PinJoystickX 39 // Inputs - Joystick
 #define PinJoystickY 36
-#define PinX1 33        // Inputs - Touchscreensensor
-#define PinX2 35        // (is x1 the signal and x2 the ground/vcc?? -> maybe better naming possible)
-#define PinY1 32
-#define PinY2 34
-#define PinServoX 26    // Outputs - Servo
-#define PinServoY 27
+#define PinX1 26        // Inputs - Touchscreensensor
+#define PinX2 33        // (is x1 the signal and x2 the ground/vcc?? -> maybe better naming possible)
+#define PinY1 25
+#define PinY2 32
+#define PinServoX 14    // Outputs - Servo
+#define PinServoY 12
 
 uint8_t mode = 0;
 long every100ms = 100;
