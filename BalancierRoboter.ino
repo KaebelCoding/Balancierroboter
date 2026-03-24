@@ -41,9 +41,9 @@ uint32_t touchXTimer = 0, touchYTimer;
 float posX = 0, posY = 0;
 
 float Kb = 0;
-float Kp, KpMax = 1;
-float Ki, KiMax = 0.0;
-float Kd, KdMax = 0.50;
+float Kp, KpMax = 0.2;  // ursprünglicher Wert = 1
+float Ki, KiMax = 0.002; // ursprünglich = 0
+float Kd, KdMax = 0.1;  // ursprünglich = 0.5 
 
 AdvancedPID PIDX(Kp, Ki, Kd, Kb);
 AdvancedPID PIDY(Kp, Ki, Kd, Kb);
@@ -101,7 +101,7 @@ void loop() {
       break;
     case 1:  // Regelbetrieb
       servoAngleX = PIDX.run(posX, joystickAngleX * 3);  //  output = myPID.run(input, setpoint);
-      servoAngleY = PIDY.run(posY, joystickAngleY * 3);
+      servoAngleY = PIDY.run(posY, joystickAngleY * 3);  // neue Zielwert Variablen erstellen und probieren 
       Serial.print (" Modus 2 - Regelbetrieb");
       //Serial.print(millis());
       /*
@@ -136,8 +136,8 @@ void loop() {
   if (every100ms > millis()) {
     every100ms = millis() + 100;
     
-    Kp = (4096 -analogRead(PinPotiP)) * KpMax / 4096;
-    Ki = (4096 -analogRead(PinPotiI)) * KiMax / 4096;
+    Kp = (4096 -analogRead(PinPotiP)) * KpMax / 4096;    // evtl Möglichkeit finden feste Regelparameter einzustellen, z.B: Taste gedrückt halten 
+    Ki = (4096 -analogRead(PinPotiI)) * KiMax / 4096;    // Poti Abfrage in Case Regelbetrieb verschieben 
     Kd = (4096 -analogRead(PinPotiD)) * KdMax / 4096;
 
     PIDX.setTunings(Kp, Ki, Kd);
