@@ -81,8 +81,8 @@ void setup() {
 void loop() {
   joystickReadingX = analogRead(PinJoystickX); // (brauche ich diese Zwischenspeicher-Variable wirklich?)
   joystickReadingY = analogRead(PinJoystickY); // (brauche ich diese Zwischenspeicher-Variable wirklich?)
-  measureX();
-  measureY();
+  measureTouchscreenXAxis();
+  measureTouchscreenYAxis();
 
   joystickAngleX = (joystickOffsetX - joystickReadingX) / 30.00; // (der Joystick reagiert aktuell noch sehr grob)
   joystickAngleY = (joystickReadingY - joystickOffsetY) / 30.00; // (vlt. kann man ihn hier feiner einstellen)
@@ -159,7 +159,7 @@ void loop() {
 
 // FUNKTIONEN ------------------------------------------------------------------------------------
 
-void measureX() {          // Sensorposition X
+void measureTouchscreenXAxis() {
   pinMode(PinY1, INPUT);
   pinMode(PinY2, INPUT);
   digitalWrite(PinY2, LOW);
@@ -187,7 +187,7 @@ void measureX() {          // Sensorposition X
   Serial.print(posX);
 }
 
-void measureY() {            // Sensorposition Y 
+void measureTouchscreenYAxis() {
   pinMode(PinX1, INPUT);
   pinMode(PinX2, INPUT);
   digitalWrite(PinX2, LOW);
