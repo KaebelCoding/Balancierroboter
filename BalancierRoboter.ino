@@ -162,7 +162,7 @@ void loop() {
 void measureTouchscreenXAxis() {
   pinMode(PinY1, INPUT);
   pinMode(PinY2, INPUT);
-  digitalWrite(PinY2, LOW);
+  digitalWrite(PinY2, LOW);<
 
   pinMode(PinX1, OUTPUT);
   digitalWrite(PinX1, HIGH);
