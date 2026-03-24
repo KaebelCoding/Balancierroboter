@@ -94,12 +94,12 @@ void loop() {
   //Serial.print(joystickAngleY);
 
   switch (mode) {
-    case 0:  //Manual Controll
-      servoAngleX = joystickAngleX;
-      servoAngleY = joystickAngleY;
-      Serial.print (" Modus 1 - Joysticksteuerung");
+    case 0:  // Power An/Aus
+      Serial.print (" Modus 3 - Aus/An schalten");
+      servoAngleX = 0;
+      servoAngleY = 0;
       break;
-    case 1:  // geregelter Betrieb
+    case 1:  // Regelbetrieb
       servoAngleX = PIDX.run(posX, joystickAngleX * 3);  //  output = myPID.run(input, setpoint);
       servoAngleY = PIDY.run(posY, joystickAngleY * 3);
       Serial.print (" Modus 2 - Regelbetrieb");
@@ -113,10 +113,10 @@ void loop() {
       Serial.print(servoAngleX);
       */
       break;
-    case 2:  //off
-      Serial.print (" Modus 3 - Aus/An schalten");
-      servoAngleX = 0;
-      servoAngleY = 0;
+    case 2:  // Joysticksteuerung
+      servoAngleX = joystickAngleX;
+      servoAngleY = joystickAngleY;
+      Serial.print (" Modus 1 - Joysticksteuerung");
       break;
   }
   Serial.println();
@@ -161,7 +161,11 @@ void loop() {
 
 // FUNKTIONEN ------------------------------------------------------------------------------------
 
+<<<<<<< HEAD:BallancierRoboter/BallancierRoboter.ino
 void measureTouchscreenXAxis() {          
+=======
+void measureTouchscreenXAxis() {
+>>>>>>> 144d95379d23c52c01f88083fa5469763bfc12d2:BallancierRoboter.ino
   pinMode(PinY1, INPUT);
   pinMode(PinY2, INPUT);
   digitalWrite(PinY2, LOW);
