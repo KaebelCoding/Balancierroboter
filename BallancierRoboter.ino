@@ -5,9 +5,9 @@
 using namespace MDO::ESP32ServoController;
 
 // === uC-Pin definition ===
-#define PinButton1 15   // Inputs - Interface
+#define PinButton1 0    
 #define PinButton2 2
-#define PinButton3 0
+#define PinButton3 15  
 #define PinPotiP 16
 #define PinPotiI 17
 #define PinPotiD 5
@@ -81,8 +81,8 @@ void setup() {
 void loop() {
   joystickReadingX = analogRead(PinJoystickX); // (brauche ich diese Zwischenspeicher-Variable wirklich?)
   joystickReadingY = analogRead(PinJoystickY); // (brauche ich diese Zwischenspeicher-Variable wirklich?)
-  measureTouchscreenXAxis();
-  measureTouchscreenYAxis();
+  measureX();
+  measureY();
 
   joystickAngleX = (joystickOffsetX - joystickReadingX) / 30.00; // (der Joystick reagiert aktuell noch sehr grob)
   joystickAngleY = (joystickReadingY - joystickOffsetY) / 30.00; // (vlt. kann man ihn hier feiner einstellen)
@@ -159,7 +159,7 @@ void loop() {
 
 // FUNKTIONEN ------------------------------------------------------------------------------------
 
-void measureTouchscreenXAxis() {
+void measureX() {          // Sensorposition X
   pinMode(PinY1, INPUT);
   pinMode(PinY2, INPUT);
   digitalWrite(PinY2, LOW);
@@ -187,7 +187,7 @@ void measureTouchscreenXAxis() {
   Serial.print(posX);
 }
 
-void measureTouchscreenYAxis() {
+void measureY() {            // Sensorposition Y 
   pinMode(PinX1, INPUT);
   pinMode(PinX2, INPUT);
   digitalWrite(PinX2, LOW);
