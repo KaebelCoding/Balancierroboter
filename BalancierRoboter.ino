@@ -58,7 +58,7 @@ void setup() {
 
   PIDX.setOutputLimits(-45, 45);
   PIDY.setOutputLimits(-45, 45);
-  PIDX.setDeadband(1);
+  PIDX.setDeadband(1);  // Threshold for the error
   PIDY.setDeadband(1);
 
   Esp32LedcRegistry::instance()->begin(LEDC_CONFIG_ESP32);
@@ -137,7 +137,7 @@ void loop() {
   if (every100ms > millis()) {
     every100ms = millis() + 100;
     
-  // Auf aktuellen Regelwert berechnen
+  // aktuelle Regelwerte berechnen
     Kp = (4096 -analogRead(PinPotiP)) * KpMax / 4096;    // evtl Möglichkeit finden feste Regelparameter einzustellen, z.B: Taste gedrückt halten 
     Ki = (4096 -analogRead(PinPotiI)) * KiMax / 4096;    // Poti Abfrage in Case Regelbetrieb verschieben 
     Kd = (4096 -analogRead(PinPotiD)) * KdMax / 4096;
@@ -145,7 +145,7 @@ void loop() {
     PIDX.setTunings(Kp, Ki, Kd);
     PIDY.setTunings(Kp, Ki, Kd);
 
-    // Auslesen des Interfaces
+    // Interfaces auslesen
     if (not digitalRead(PinButtonPower)) {
       mode = 0;
       Serial.println("Modus: An/Aus \n");
