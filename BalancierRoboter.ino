@@ -161,11 +161,8 @@ void loop() {
 
 // FUNKTIONEN ------------------------------------------------------------------------------------
 
-<<<<<<< HEAD:BallancierRoboter/BallancierRoboter.ino
-void measureTouchscreenXAxis() {          
-=======
+
 void measureTouchscreenXAxis() {
->>>>>>> 144d95379d23c52c01f88083fa5469763bfc12d2:BallancierRoboter.ino
   pinMode(PinY1, INPUT);
   pinMode(PinY2, INPUT);
   digitalWrite(PinY2, LOW);<
