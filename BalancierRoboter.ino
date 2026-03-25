@@ -49,7 +49,6 @@ AdvancedPID PIDX(Kp, Ki, Kd, Kb);
 AdvancedPID PIDY(Kp, Ki, Kd, Kb);
 
 void setup() {
-  
   pinMode(PinButtonPower, INPUT_PULLUP);
   pinMode(PinButtonRegelbetrieb, INPUT_PULLUP);
   pinMode(PinButtonJoysticksteuerung, INPUT_PULLUP);
@@ -127,16 +126,18 @@ void loop() {
   //Serial.println(servoAngleY);
 
   delay(20); // in ms
-
+  // min. und max. Beschränkung der Servowinkel
   servoAngleX = constrain(servoAngleX, -45, 45);
   servoAngleY = constrain(servoAngleY, -45, 45);
 
   ServoX.moveTo(servoAngleX + servoOffsetX, 0, false);
   ServoY.moveTo(-servoAngleY + servoOffsetY, 0, false);
 
+  // 10 mal pro Sekunde wird:
   if (every100ms > millis()) {
     every100ms = millis() + 100;
     
+  // Auf aktuellen Regelwert berechnen
     Kp = (4096 -analogRead(PinPotiP)) * KpMax / 4096;    // evtl Möglichkeit finden feste Regelparameter einzustellen, z.B: Taste gedrückt halten 
     Ki = (4096 -analogRead(PinPotiI)) * KiMax / 4096;    // Poti Abfrage in Case Regelbetrieb verschieben 
     Kd = (4096 -analogRead(PinPotiD)) * KdMax / 4096;
