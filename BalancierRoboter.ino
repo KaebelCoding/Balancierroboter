@@ -79,7 +79,7 @@ void setup() {
 
 // BETRIEB ----------------------------------------------------------------------------------------
 void loop() {
-  
+  // Warum wird der Joystick ausgelesen, wenn der Joystickmodus vlt. gar nicht aktiv ist?
   joystickReadingX = analogRead(PinJoystickX); // (brauche ich diese Zwischenspeicher-Variable wirklich?)
   joystickReadingY = analogRead(PinJoystickY); // (brauche ich diese Zwischenspeicher-Variable wirklich?)
   measureTouchscreenXAxis();
@@ -100,6 +100,7 @@ void loop() {
       servoAngleY = 0;
       break;
     case 1:  // Regelbetrieb
+    // Warum werden Joystickwerte im Regelbetrieb verwendet? Sollte der Regelbetrieb nicht komplett entkoppelt vom Joystick sein?
       servoAngleX = PIDX.run(posX, joystickAngleX * 3);  //  output = myPID.run(input, setpoint);
       servoAngleY = PIDY.run(posY, joystickAngleY * 3);  // neue Zielwert Variablen erstellen und probieren 
       Serial.print ("Modus 2 - Regelbetrieb \n");
