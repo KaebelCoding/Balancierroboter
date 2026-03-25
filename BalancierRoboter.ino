@@ -84,6 +84,7 @@ void loop() {
   joystickReadingY = analogRead(PinJoystickY); // (brauche ich diese Zwischenspeicher-Variable wirklich?)
   measureTouchscreenXAxis();
   measureTouchscreenYAxis();
+  Serial.print ("\n");
 
   joystickAngleX = (joystickOffsetX - joystickReadingX) / 30.00; // (der Joystick reagiert aktuell noch sehr grob)
   joystickAngleY = (joystickReadingY - joystickOffsetY) / 30.00; // (vlt. kann man ihn hier feiner einstellen)
@@ -94,14 +95,14 @@ void loop() {
 
   switch (mode) {
     case 0:  // Power An/Aus
-      Serial.print (" Modus 3 - Aus/An schalten");
+      Serial.print ("\n Modus 1 - Aus/An schalten");
       servoAngleX = 0;
       servoAngleY = 0;
       break;
     case 1:  // Regelbetrieb
       servoAngleX = PIDX.run(posX, joystickAngleX * 3);  //  output = myPID.run(input, setpoint);
       servoAngleY = PIDY.run(posY, joystickAngleY * 3);  // neue Zielwert Variablen erstellen und probieren 
-      Serial.print (" Modus 2 - Regelbetrieb");
+      Serial.print ("\n Modus 2 - Regelbetrieb");
       //Serial.print(millis());
       /*
       Serial.print("\t");
@@ -115,7 +116,7 @@ void loop() {
     case 2:  // Joysticksteuerung
       servoAngleX = joystickAngleX;
       servoAngleY = joystickAngleY;
-      Serial.print (" Modus 1 - Joysticksteuerung");
+      Serial.print ("\n Modus 3 - Joysticksteuerung");
       break;
   }
   Serial.println();
