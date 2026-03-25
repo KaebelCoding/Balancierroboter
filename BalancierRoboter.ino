@@ -204,7 +204,6 @@ void measureTouchscreenYAxis() {
   //Serial.print("\t");
   Serial.print("Touchscreen y-Position:\t");
   Serial.print(touchY);
-  Serial.print("\t");
   
   if (abs(touchY - touchYOld) > 100 && millis() < touchYTimer) {
     //Serial.print("500");
