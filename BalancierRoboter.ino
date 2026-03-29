@@ -104,8 +104,10 @@ void loop() {
     case 1:
       Serial.print ("Modus 2 - Regelbetrieb \n");
       // Warum werden Joystickwerte im Regelbetrieb verwendet? Sollte der Regelbetrieb nicht komplett entkoppelt vom Joystick sein?
-      servoAngleX = PIDX.run(posX, joystickAngleX * 3);  //  output = myPID.run(input, setpoint);
-      servoAngleY = PIDY.run(posY, joystickAngleY * 3);  // neue Zielwert Variablen erstellen und probieren 
+      servoAngleX = PIDX.run(posX, joystickAngleX * 3); // output = myPID.run(input, setpoint);
+      servoAngleY = PIDY.run(posY, joystickAngleY * 3); // neue Zielwert-Variablen erstellen und probieren 
+                                                        // posX und posY: sind Abstände zum Zielwert (Plattenmitte)
+                                                        // joystickAngle: ist mögliche Verschiebung des Zielpunktes
       // Serial.print("X-Position:\t");
       // Serial.print(posX);
       // Serial.print("Joystick X-Winkel:\t");
