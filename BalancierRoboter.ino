@@ -29,7 +29,7 @@ int joystickOffsetX = 1840;  //Joystickposition bei keiner Auslenkung
 int joystickOffsetY = 1821;
 float joystickAngleX;
 float joystickAngleY;
-float joystickAngleTranslation = 1.6;
+float joystickAngleTranslation = 0.65;  // Übersetzungsverhältnis zwischen Joystick- und Servowinkel
 
 ServoController ServoX, ServoY;  // create servo object to control a servo
 float servoAngleX;
@@ -118,8 +118,8 @@ void loop() {
       break;
     case 2:
       Serial.print ("Modus 3 - Joysticksteuerung \n");
-      servoAngleX = joystickAngleX / joystickAngleTranslation;
-      servoAngleY = joystickAngleY / joystickAngleTranslation;
+      servoAngleX = joystickAngleX * joystickAngleTranslation;
+      servoAngleY = joystickAngleY * joystickAngleTranslation;
       break;
   }
   Serial.print("\n");
