@@ -99,10 +99,10 @@ void loop() {
       servoAngleY = 0;
       break;
     case 1:  // Regelbetrieb
+      Serial.print ("Modus 2 - Regelbetrieb \n");
     // Warum werden Joystickwerte im Regelbetrieb verwendet? Sollte der Regelbetrieb nicht komplett entkoppelt vom Joystick sein?
       servoAngleX = PIDX.run(posX, joystickAngleX * 3);  //  output = myPID.run(input, setpoint);
       servoAngleY = PIDY.run(posY, joystickAngleY * 3);  // neue Zielwert Variablen erstellen und probieren 
-      Serial.print ("Modus 2 - Regelbetrieb \n");
       //Serial.print(millis());
       /*
       Serial.print("\t");
@@ -114,9 +114,9 @@ void loop() {
       */
       break;
     case 2:  // Joysticksteuerung
+      Serial.print ("Modus 3 - Joysticksteuerung \n");
       servoAngleX = joystickAngleX;
       servoAngleY = joystickAngleY;
-      Serial.print ("Modus 3 - Joysticksteuerung \n");
       break;
   }
   Serial.println();
@@ -146,7 +146,7 @@ void loop() {
     PIDY.setTunings(Kp, Ki, Kd);
 
     // Interfaces auslesen
-    if (not digitalRead(PinButtonPower)) {
+    if (not digitalRead(PinButtonPower)) {      // hier wird immer mit "not" gearbeitet, wäre es möglich hier auch ohne "not" zu arbeiten?
       mode = 0;
       Serial.println("Modus: An/Aus \n");
     }
@@ -163,16 +163,18 @@ void loop() {
 
 // FUNKTIONEN ------------------------------------------------------------------------------------
 void measureTouchscreenXAxis() {
-  pinMode(PinY1, INPUT);
+  // Stelle die Touchscreen-Pins ein
+  pinMode(PinY1, INPUT);      // Y-Pins
   pinMode(PinY2, INPUT);
   digitalWrite(PinY2, LOW);
-
-  pinMode(PinX1, OUTPUT);
+  pinMode(PinX1, OUTPUT);     // X-Pins
   digitalWrite(PinX1, HIGH);
   delay(1); // in ms
   pinMode(PinX2, OUTPUT);
   digitalWrite(PinX2, LOW);
   delay(2); // in ms
+
+  // Lese den Touchscreen-X-Wert aus
   touchX = analogRead(PinY1);
   Serial.print("Touchscreen x-Position:\t");
   Serial.print(touchX);
@@ -186,22 +188,25 @@ void measureTouchscreenXAxis() {
     //Serial.print("0");
   }
   
+  // Debugging
   Serial.print("\t Calculated x-Position:\t");
   Serial.print(posX);
   Serial.print("\n");
 }
 
 void measureTouchscreenYAxis() {
-  pinMode(PinX1, INPUT);
+  // Stelle die Touchscreen-Pins ein
+  pinMode(PinX1, INPUT);     // X-Pins
   pinMode(PinX2, INPUT);
   digitalWrite(PinX2, LOW);
-  pinMode(PinY1, OUTPUT);
+  pinMode(PinY1, OUTPUT);    // Y-Pins
   digitalWrite(PinY1, HIGH);
   delay(1); // in ms
   pinMode(PinY2, OUTPUT);
   digitalWrite(PinY2, LOW);
   delay(2); // in ms
 
+  // Lese den Touchscreen-Y-Wert aus
   touchY = analogRead(PinX1);
   //Serial.print("\t");
   Serial.print("Touchscreen y-Position:\t");
@@ -216,6 +221,7 @@ void measureTouchscreenYAxis() {
     //Serial.print("0");
   }
   
+  // Debugging
   Serial.print("\t Calculated y-Position:\t");
   Serial.print(posY);
   Serial.print("\n");
