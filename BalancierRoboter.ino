@@ -29,6 +29,7 @@ int joystickOffsetX = 1840;  //Joystickposition bei keiner Auslenkung
 int joystickOffsetY = 1821;
 float joystickAngleX;
 float joystickAngleY;
+float joystickAngleTranslation = 2.0;
 
 ServoController ServoX, ServoY;  // create servo object to control a servo
 float servoAngleX;
@@ -93,12 +94,12 @@ void loop() {
   //Serial.print(joystickAngleY);
 
   switch (mode) {
-    case 0:  // Power An/Aus
+    case 0:
       Serial.print ("Modus 1 - Aus/An schalten \n");
       servoAngleX = 0;
       servoAngleY = 0;
       break;
-    case 1:  // Regelbetrieb
+    case 1:
       Serial.print ("Modus 2 - Regelbetrieb \n");
     // Warum werden Joystickwerte im Regelbetrieb verwendet? Sollte der Regelbetrieb nicht komplett entkoppelt vom Joystick sein?
       servoAngleX = PIDX.run(posX, joystickAngleX * 3);  //  output = myPID.run(input, setpoint);
@@ -113,10 +114,10 @@ void loop() {
       Serial.print(servoAngleX);
       */
       break;
-    case 2:  // Joysticksteuerung
+    case 2:
       Serial.print ("Modus 3 - Joysticksteuerung \n");
-      servoAngleX = joystickAngleX;
-      servoAngleY = joystickAngleY;
+      servoAngleX = joystickAngleX / joystickAngleTranslation;
+      servoAngleY = joystickAngleY / joystickAngleTranslation;
       break;
   }
   Serial.println();
@@ -137,7 +138,7 @@ void loop() {
   if (every100ms > millis()) {
     every100ms = millis() + 100;
     
-  // aktuelle Regelwerte berechnen
+  // aktuelle Regelwerte berechnen (Potis werden ausgelesen)
     Kp = (4096 -analogRead(PinPotiP)) * KpMax / 4096;    // evtl Möglichkeit finden feste Regelparameter einzustellen, z.B: Taste gedrückt halten 
     Ki = (4096 -analogRead(PinPotiI)) * KiMax / 4096;    // Poti Abfrage in Case Regelbetrieb verschieben 
     Kd = (4096 -analogRead(PinPotiD)) * KdMax / 4096;
@@ -145,7 +146,7 @@ void loop() {
     PIDX.setTunings(Kp, Ki, Kd);
     PIDY.setTunings(Kp, Ki, Kd);
 
-    // Interfaces auslesen
+    // Interface-Buttons auslesen und Modus setzen
     if (not digitalRead(PinButtonPower)) {      // hier wird immer mit "not" gearbeitet, wäre es möglich hier auch ohne "not" zu arbeiten?
       mode = 0;
       Serial.println("Modus: An/Aus \n");
