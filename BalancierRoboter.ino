@@ -210,8 +210,6 @@ void measureTouchscreenYAxis() {
   Serial.print(touchY);
   
   if (abs(touchY - touchYOld) < 100 || millis() > touchYTimer) {
-    //Serial.print("500");
-  } else {
     touchYTimer = millis() + 100;
     touchYOld = touchY;
     posY = (touchY - 1992) * 0.10280; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
