@@ -15,7 +15,7 @@ Dieses Projekt ist der Quellcode für einen Balancierroboter mit einem Ball auf 
 ![](images/Neue_Platine_beschriftet.jpeg)
 ![](images/Pin-Belegung2.jpg)
 
-## Servobeschaltung
+## Servomotorbeschaltung
 
 ### Knopf
 
