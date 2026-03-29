@@ -23,8 +23,6 @@ using namespace MDO::ESP32ServoController;
 uint8_t mode = 0;
 long every100ms = 100;
 
-int joystickReadingX;
-int joystickReadingY;
 int joystickOffsetX = 1840;  //Joystickposition bei keiner Auslenkung
 int joystickOffsetY = 1821;
 float joystickAngleX;
@@ -79,14 +77,12 @@ void setup() {
 
 // BETRIEB ----------------------------------------------------------------------------------------
 void loop() {
-  // Warum wird der Joystick ausgelesen, wenn der Joystickmodus vlt. gar nicht aktiv ist?
-  joystickReadingX = analogRead(PinJoystickX); // (brauche ich diese Zwischenspeicher-Variable wirklich?)
-  joystickReadingY = analogRead(PinJoystickY); // (brauche ich diese Zwischenspeicher-Variable wirklich?)
   measureTouchscreenXAxis();
   measureTouchscreenYAxis();
 
-  joystickAngleX = (joystickOffsetX - joystickReadingX) / 30.00; // (der Joystick reagiert aktuell noch sehr grob)
-  joystickAngleY = (joystickReadingY - joystickOffsetY) / 30.00; // (vlt. kann man ihn hier feiner einstellen)
+  // Warum wird der Joystick ausgelesen, wenn der Joystickmodus vlt. gar nicht aktiv ist? Weil man mit dem Joystick den Zielpunkt der Steuerung verschieben kann.
+  joystickAngleX = (joystickOffsetX - analogRead(PinJoystickX)) / 30.00; // (der Joystick reagiert aktuell noch sehr grob)
+  joystickAngleY = (joystickReadingY - analogRead(PinJoystickY)) / 30.00; // (vlt. kann man ihn hier feiner einstellen)
   
   Serial.print("Joysitck X-Winkel:\t");
   Serial.print(joystickAngleX);
