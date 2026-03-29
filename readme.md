@@ -11,9 +11,9 @@ Dieses Projekt ist der Quellcode für einen Balancierroboter mit einem Ball auf 
 * 3x Potentiometer
 * 3x Taster
 * Joystick
+* Touchscreen
 
 ![](images/Neue_Platine_beschriftet.jpeg)
-![](images/Pin-Belegung2.jpg)
 
 ## Servomotorbeschaltung
 
