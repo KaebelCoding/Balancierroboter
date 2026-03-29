@@ -84,7 +84,6 @@ void loop() {
   joystickReadingY = analogRead(PinJoystickY); // (brauche ich diese Zwischenspeicher-Variable wirklich?)
   measureTouchscreenXAxis();
   measureTouchscreenYAxis();
-  Serial.print ("\n");
 
   joystickAngleX = (joystickOffsetX - joystickReadingX) / 30.00; // (der Joystick reagiert aktuell noch sehr grob)
   joystickAngleY = (joystickReadingY - joystickOffsetY) / 30.00; // (vlt. kann man ihn hier feiner einstellen)
@@ -217,5 +216,5 @@ void measureTouchscreenYAxis() {
   // Debugging
   Serial.print("\t Calculated y-Position:\t");
   Serial.print(posY);
-  Serial.print("\n");
+  Serial.print("\n\n");
 }
