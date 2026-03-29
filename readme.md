@@ -8,7 +8,7 @@ Dieses Projekt ist der Quellcode für einen Balancierroboter mit einem Ball auf 
 
 * ESP32-WROOM-32A
 * 2x Servomotor
-* 3x 10k Ohm Potentiometer
+* 3x Potentiometer
 * 3x Taster
 * Joystick
 
