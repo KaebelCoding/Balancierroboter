@@ -178,15 +178,10 @@ void measureTouchscreenXAxis() {
   Serial.print("Touchscreen x-Position:\t");
   Serial.print(touchX);
 
-  if (abs(touchX - touchXOld) > 100 && millis() < touchXTimer) {
-    //Serial.print("400");
-  } else {   //Normal
-    touchXTimer = millis() + 100;
-    touchXOld = touchX;
-    posX = (touchX - 1877) * 0.121535; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
-    //Serial.print("0");
-  }
-  
+  touchXTimer = millis() + 100;
+  touchXOld = touchX;
+  posX = (touchX - 1877) * 0.121535; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
+    
   // Debugging
   Serial.print("\t Calculated x-Position:\t");
   Serial.print(posX);
@@ -211,14 +206,9 @@ void measureTouchscreenYAxis() {
   Serial.print("Touchscreen y-Position:\t");
   Serial.print(touchY);
   
-  if (abs(touchY - touchYOld) > 100 && millis() < touchYTimer) {
-    //Serial.print("500");
-  } else {
-    touchYTimer = millis() + 100;
-    touchYOld = touchY;
-    posY = (touchY - 1992) * 0.10280; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
-    //Serial.print("0");
-  }
+  touchYTimer = millis() + 100;
+  touchYOld = touchY;
+  posY = (touchY - 1992) * 0.10280; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
   
   // Debugging
   Serial.print("\t Calculated y-Position:\t");
