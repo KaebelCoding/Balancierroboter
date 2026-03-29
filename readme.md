@@ -11,6 +11,7 @@ Dieses Projekt ist der Quellcode für einen Balancierroboter mit einem Ball auf 
 * 2x 10k Ohm Potentiometer
 * hook-up wires
 
+![](images/Neue_Platine.jpeg)
 ![](images/Pin-Belegung2.jpg)
 
 ## Servobeschaltung
