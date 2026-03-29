@@ -103,18 +103,16 @@ void loop() {
       break;
     case 1:
       Serial.print ("Modus 2 - Regelbetrieb \n");
-    // Warum werden Joystickwerte im Regelbetrieb verwendet? Sollte der Regelbetrieb nicht komplett entkoppelt vom Joystick sein?
+      // Warum werden Joystickwerte im Regelbetrieb verwendet? Sollte der Regelbetrieb nicht komplett entkoppelt vom Joystick sein?
       servoAngleX = PIDX.run(posX, joystickAngleX * 3);  //  output = myPID.run(input, setpoint);
       servoAngleY = PIDY.run(posY, joystickAngleY * 3);  // neue Zielwert Variablen erstellen und probieren 
-      //Serial.print(millis());
-      /*
-      Serial.print("\t");
-      Serial.print(posX);
-      Serial.print("\t");
-      Serial.print(joystickAngleX);
-      Serial.print("\t");
-      Serial.print(servoAngleX);
-      */
+      // Serial.print("X-Position:\t");
+      // Serial.print(posX);
+      // Serial.print("Joystick X-Winkel:\t");
+      // Serial.print(joystickAngleX);
+      // Serial.print("Servo X-Winkel:\t");
+      // Serial.print(servoAngleX);
+      // Serial.print("\n");
       break;
     case 2:
       Serial.print ("Modus 3 - Joysticksteuerung \n");
@@ -122,11 +120,7 @@ void loop() {
       servoAngleY = joystickAngleY / joystickAngleTranslation;
       break;
   }
-  Serial.println();
-
-  //Serial.print(servoAngleX);
-  //Serial.print("\t");
-  //Serial.println(servoAngleY);
+  Serial.print("\n");
 
   delay(20); // in ms
   // min. und max. Beschränkung der Servowinkel
@@ -187,7 +181,7 @@ void measureTouchscreenXAxis() {
   } else {   //Normal
     touchXTimer = millis() + 100;
     touchXOld = touchX;
-    posX = (touchX - 1877) * 0.121535;
+    posX = (touchX - 1877) * 0.121535; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
     //Serial.print("0");
   }
   
@@ -220,7 +214,7 @@ void measureTouchscreenYAxis() {
   } else {
     touchYTimer = millis() + 100;
     touchYOld = touchY;
-    posY = (touchY - 1992) * 0.10280;
+    posY = (touchY - 1992) * 0.10280; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
     //Serial.print("0");
   }
   
