@@ -74,7 +74,7 @@ void setup() {
     Serial.println("  failed to init the y-servo..");
     return;
   }
-  Serial.begin(115200); // Baud Rate, größer als 9600, weil Joystick sonst verzögert reagiert 
+  Serial.begin(115200); // Baud Rate = 115200, weil Joystick sonst verzögert reagiert 
 }
 
 // BETRIEB ----------------------------------------------------------------------------------------
@@ -93,7 +93,7 @@ void loop() {
   Serial.print("\t");
   Serial.print("Joysitck Y-Winkel:\t");
   Serial.print(joystickAngleY);
-  Serial.print("\n\n");
+  Serial.print("\n");
 
   switch (mode) {
     case 0:
