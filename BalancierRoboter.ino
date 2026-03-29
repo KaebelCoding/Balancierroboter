@@ -88,14 +88,16 @@ void loop() {
 
   joystickAngleX = (joystickOffsetX - joystickReadingX) / 30.00; // (der Joystick reagiert aktuell noch sehr grob)
   joystickAngleY = (joystickReadingY - joystickOffsetY) / 30.00; // (vlt. kann man ihn hier feiner einstellen)
-  //Serial.print("X ");
-  //Serial.print(joystickAngleX);
-  //Serial.print("\t Y ");
-  //Serial.print(joystickAngleY);
+  Serial.print("Joysitck X-Winkel:\t");
+  Serial.print(joystickAngleX);
+  Serial.print("\t");
+  Serial.print("Joysitck Y-Winkel:\t");
+  Serial.print(joystickAngleY);
+  Serial.print("\n\n");
 
   switch (mode) {
     case 0:
-      Serial.print ("Modus 1 - Aus/An schalten \n");
+      Serial.print ("Modus 1 - StandBy/An schalten \n");
       servoAngleX = 0;
       servoAngleY = 0;
       break;
