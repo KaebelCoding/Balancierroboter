@@ -29,7 +29,7 @@ int joystickOffsetX = 1840;  //Joystickposition bei keiner Auslenkung
 int joystickOffsetY = 1821;
 float joystickAngleX;
 float joystickAngleY;
-float joystickAngleTranslation = 2.0;
+float joystickAngleTranslation = 1.6;
 
 ServoController ServoX, ServoY;  // create servo object to control a servo
 float servoAngleX;
