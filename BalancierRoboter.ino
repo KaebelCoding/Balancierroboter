@@ -81,8 +81,8 @@ void loop() {
   measureTouchscreenYAxis();
 
   // Warum wird der Joystick ausgelesen, wenn der Joystickmodus vlt. gar nicht aktiv ist? Weil man mit dem Joystick den Zielpunkt der Steuerung verschieben kann.
-  joystickAngleX = (joystickOffsetX - analogRead(PinJoystickX)) / 30.00; // (der Joystick reagiert aktuell noch sehr grob)
-  joystickAngleY = (joystickOffsetY - analogRead(PinJoystickY)) / 30.00; // (vlt. kann man ihn hier feiner einstellen)
+  joystickAngleX = (joystickOffsetX - analogRead(PinJoystickX)) / 30.00;
+  joystickAngleY = (joystickOffsetY - analogRead(PinJoystickY)) / 30.00;
   
   Serial.print("Joysitck X-Winkel:\t");
   Serial.print(joystickAngleX);
