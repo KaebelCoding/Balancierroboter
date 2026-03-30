@@ -23,16 +23,16 @@ using namespace MDO::ESP32ServoController;
 uint8_t mode = 0;
 long every100ms = 100;
 
-int joystickOffsetX = 1840;  //Joystickposition bei keiner Auslenkung
+int joystickOffsetX = 1840;             // Joystickposition bei keiner Auslenkung
 int joystickOffsetY = 1821;
 float joystickAngleX;
 float joystickAngleY;
 float joystickAngleTranslation = 0.65;  // Übersetzungsverhältnis zwischen Joystick- und Servowinkel
 
-ServoController ServoX, ServoY;  // create servo object to control a servo
+ServoController ServoX, ServoY;         // erzeuge Servo-Objekt um den Servomotor zu steuern
 float servoAngleX;
 float servoAngleY; 
-float servoOffsetX = 85.0; //Servopositionen bei ungeneigter Ebene
+float servoOffsetX = 85.0;              // Servopositionen bei ungeneigter Ebene (bessere Bezeichnung als Offset möglich? Vlt. ZeroPosition? Oder EvenPlateAngle oder Balanced Plate Angle?)
 float servoOffsetY = 90.0;
 
 int touchX = 0, touchY = 0, touchXOld = -1, touchYOld = -1;  
@@ -40,9 +40,9 @@ uint32_t touchXTimer = 0, touchYTimer;
 float posX = 0, posY = 0;
 
 float Kb = 0;
-float Kp, KpMax = 0.2;  // ursprünglicher Wert = 1
-float Ki, KiMax = 0.002; // ursprünglich = 0
-float Kd, KdMax = 0.1;  // ursprünglich = 0.5 
+float Kp, KpMax = 0.2;                  // ursprünglicher Wert = 1
+float Ki, KiMax = 0.002;                // ursprünglich = 0
+float Kd, KdMax = 0.1;                  // ursprünglich = 0.5 
 
 AdvancedPID PIDX(Kp, Ki, Kd, Kb);
 AdvancedPID PIDY(Kp, Ki, Kd, Kb);
@@ -77,17 +77,17 @@ void setup() {
 
 // BETRIEB ----------------------------------------------------------------------------------------
 void loop() {
-  measureTouchscreenXAxis();
-  measureTouchscreenYAxis();
 
   switch (mode) {
     case 0:
       Serial.print ("Modus 1 - StandBy\n");
-      servoAngleX = 0;
-      servoAngleY = 0;
+      servoAngleX = 0; // keine gerade Platte, sondern nur
+      servoAngleY = 0; // Nullwinkel der Servos (-> beliebig)
       break;
     case 1:
       Serial.print ("Modus 2 - Regelbetrieb\n");
+      measureTouchscreenXAxis();
+      measureTouchscreenYAxis();
       measureJoystickAngles();
       // Warum werden Joystickwerte im Regelbetrieb verwendet? Sollte der Regelbetrieb nicht komplett entkoppelt vom Joystick sein?
       servoAngleX = PIDX.run(posX, joystickAngleX * 3); // output = myPID.run(input, setpoint);
@@ -104,6 +104,8 @@ void loop() {
       break;
     case 2:
       Serial.print ("Modus 3 - Joysticksteuerung\n");
+      measureTouchscreenXAxis();
+      measureTouchscreenYAxis();
       measureJoystickAngles();
       servoAngleX = joystickAngleX * joystickAngleTranslation;
       servoAngleY = joystickAngleY * joystickAngleTranslation;
