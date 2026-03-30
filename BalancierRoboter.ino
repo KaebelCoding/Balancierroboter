@@ -89,7 +89,7 @@ void loop() {
       measureTouchscreenXAxis();
       measureTouchscreenYAxis();
       measureJoystickAngles();
-      // Warum werden Joystickwerte im Regelbetrieb verwendet? Sollte der Regelbetrieb nicht komplett entkoppelt vom Joystick sein?
+      // Joystickwerte zum möglichen Verschieben des Zielpunktes
       servoAngleX = PIDX.run(posX, joystickAngleX * 3); // output = myPID.run(input, setpoint);
       servoAngleY = PIDY.run(posY, joystickAngleY * 3); // neue Zielwert-Variablen erstellen und probieren 
                                                         // posX und posY: Abstände zum Zielwert (Plattenmitte)
