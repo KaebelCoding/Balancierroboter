@@ -42,7 +42,7 @@ float posX = 0, posY = 0;
 float Kb = 0;
 float Kp, KpMax = 0.2;                  // ursprünglicher Wert = 1
 float Ki, KiMax = 0.002;                // ursprünglich = 0
-float Kd, KdMax = 0.1;                  // ursprünglich = 0.5 
+float Kd, KdMax = 0.1;                  // ursprünglich = 0.5
 
 AdvancedPID PIDX(Kp, Ki, Kd, Kb);
 AdvancedPID PIDY(Kp, Ki, Kd, Kb);
