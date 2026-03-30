@@ -124,9 +124,9 @@ void loop() {
     every100ms = millis() + 100;
     
   // aktuelle Regelwerte berechnen (Potis werden ausgelesen)
-    Kp = (4096 -analogRead(PinPotiP)) * KpMax / 4096;    // evtl Möglichkeit finden feste Regelparameter einzustellen, z.B: Taste gedrückt halten 
-    Ki = (4096 -analogRead(PinPotiI)) * KiMax / 4096;    // Poti Abfrage in Case Regelbetrieb verschieben 
-    Kd = (4096 -analogRead(PinPotiD)) * KdMax / 4096;
+    Kp = (4096 -analogRead(PinPotiP)) * KpMax / 4096;   // evtl Möglichkeit finden feste Regelparameter einzustellen, z.B: Taste gedrückt halten 
+    Ki = (4096 -analogRead(PinPotiI)) * KiMax / 4096;   // Poti-Abfrage in Case Regelbetrieb verschieben 
+    Kd = (4096 -analogRead(PinPotiD)) * KdMax / 4096;   // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
 
     PIDX.setTunings(Kp, Ki, Kd);
     PIDY.setTunings(Kp, Ki, Kd);
