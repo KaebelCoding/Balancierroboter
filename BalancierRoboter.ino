@@ -80,16 +80,6 @@ void loop() {
   measureTouchscreenXAxis();
   measureTouchscreenYAxis();
 
-  // Hier wird der Joystick ausgelesen, weil mit ihm der Zielpunkt der Regelung verschoben werden kann.
-  joystickAngleX = (joystickOffsetX - analogRead(PinJoystickX)) / 30.00;  // der empirische Wert hier sollte einen Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
-  joystickAngleY = (joystickOffsetY - analogRead(PinJoystickY)) / 30.00;  // der empirische Wert hier sollte einen Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
-  
-  Serial.print("Joysitck X-Winkel:\t");
-  Serial.print(joystickAngleX);
-  Serial.print("\tJoysitck Y-Winkel:\t");
-  Serial.print(joystickAngleY);
-  Serial.print("\n");
-
   switch (mode) {
     case 0:
       Serial.print ("Modus 1 - StandBy/An schalten\n");
@@ -98,6 +88,7 @@ void loop() {
       break;
     case 1:
       Serial.print ("Modus 2 - Regelbetrieb\n");
+      measureJoystickAngles();
       // Warum werden Joystickwerte im Regelbetrieb verwendet? Sollte der Regelbetrieb nicht komplett entkoppelt vom Joystick sein?
       servoAngleX = PIDX.run(posX, joystickAngleX * 3); // output = myPID.run(input, setpoint);
       servoAngleY = PIDY.run(posY, joystickAngleY * 3); // neue Zielwert-Variablen erstellen und probieren 
@@ -113,6 +104,7 @@ void loop() {
       break;
     case 2:
       Serial.print ("Modus 3 - Joysticksteuerung\n");
+      measureJoystickAngles();
       servoAngleX = joystickAngleX * joystickAngleTranslation;
       servoAngleY = joystickAngleY * joystickAngleTranslation;
       break;
@@ -213,4 +205,14 @@ void measureTouchscreenYAxis() {
   Serial.print("\t Calculated y-Position:\t");
   Serial.print(posY);
   Serial.print("\n\n");
+}
+
+void measureJoystickAngles() {
+  joystickAngleX = (joystickOffsetX - analogRead(PinJoystickX)) / 30.00;  // der empirische Wert hier sollte einen Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
+  joystickAngleY = (joystickOffsetY - analogRead(PinJoystickY)) / 30.00;  // der empirische Wert hier sollte einen Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
+  // Serial.print("Joysitck X-Winkel:\t");
+  // Serial.print(joystickAngleX);
+  // Serial.print("\tJoysitck Y-Winkel:\t");
+  // Serial.print(joystickAngleY);
+  // Serial.print("\n");
 }
