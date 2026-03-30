@@ -20,7 +20,7 @@ using namespace MDO::ESP32ServoController;
 #define PinServoX 14                    // Outputs - Servos
 #define PinServoY 12
 
-uint8_t mode = 0;
+uint8_t mode = 0;                       // Startet in StandBy (Modus 1 von 3)
 long every100ms = 100;
 
 int joystickOffsetX = 1840;             // Joystickposition bei keiner Auslenkung
