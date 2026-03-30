@@ -63,8 +63,8 @@ void setup() {
   Esp32LedcRegistry::instance()->begin(LEDC_CONFIG_ESP32);
   BestAvailableFactory oTimerChannelFactory;
 
-  ServoFactoryDecorator oFactoryDecorator(oTimerChannelFactory);  //let this ServoFactoryDecorator define the servo frequency to use and such
-  if (!ServoX.begin(oFactoryDecorator, PinServoX)) {              //3rd parameter is the default angle to start from: 90 degrees in this case
+  ServoFactoryDecorator oFactoryDecorator(oTimerChannelFactory);  // ServoFactoryDecorator definiert Servo-Frequenz und weiteres
+  if (!ServoX.begin(oFactoryDecorator, PinServoX)) {
     Serial.println("  failed to init the x-servo..\n");
     return;
   }
