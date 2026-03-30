@@ -104,8 +104,6 @@ void loop() {
       break;
     case 2:
       Serial.print ("Modus 3 - Joysticksteuerung\n");
-      measureTouchscreenXAxis();
-      measureTouchscreenYAxis();
       measureJoystickAngles();
       servoAngleX = joystickAngleX * joystickAngleTranslation;
       servoAngleY = joystickAngleY * joystickAngleTranslation;
