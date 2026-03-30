@@ -11,20 +11,20 @@ using namespace MDO::ESP32ServoController;
 #define PinPotiP 16
 #define PinPotiI 17
 #define PinPotiD 5
-#define PinJoystickX 39 // Inputs - Joystick
+#define PinJoystickX 39                 // Inputs - Joystick
 #define PinJoystickY 36
-#define PinX1 26        // Inputs - Touchscreensensor
-#define PinX2 33        // Evtl. erklärendere Variablennamen möglich
+#define PinX1 26                        // Inputs - Touchscreensensor
+#define PinX2 33                        // Evtl. erklärendere Variablennamen möglich
 #define PinY1 25
 #define PinY2 32
-#define PinServoX 14    // Outputs - Servos
+#define PinServoX 14                    // Outputs - Servos
 #define PinServoY 12
 
 uint8_t mode = 0;
 long every100ms = 100;
 
 int joystickOffsetX = 1840;             // Joystickposition bei keiner Auslenkung
-int joystickOffsetY = 1821;
+int joystickOffsetY = 1821;             // genauere Bezeichnung hilfreich (Offset von was?)
 float joystickAngleX;
 float joystickAngleY;
 float joystickAngleTranslation = 0.65;  // Übersetzungsverhältnis zwischen Joystick- und Servowinkel
