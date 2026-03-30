@@ -111,13 +111,13 @@ void loop() {
       servoAngleY = PIDY.run(posY, joystickAngleY * 3); // neue Zielwert-Variablen erstellen und probieren 
                                                         // posX und posY: Abstände zum Zielwert (Plattenmitte)
                                                         // joystickAngle: mögliche Verschiebung des Zielpunktes durch Joystick
-      // Serial.print("X-Position:\t");
-      // Serial.print(posX);
-      // Serial.print("Joystick X-Winkel:\t");
-      // Serial.print(joystickAngleX);
-      // Serial.print("Servo X-Winkel:\t");
-      // Serial.print(servoAngleX);
-      // Serial.print("\n");
+      Serial.print("X-Position:\t");
+      Serial.print(posX);
+      Serial.print("\tServo X-Winkel:\t");
+      Serial.print(servoAngleX);
+      Serial.print("Servo Y-Winkel:\t");
+      Serial.print(servoAngleY);
+      Serial.print("\n");
       break;
     case 2:
       Serial.print ("Modus 3 - Joysticksteuerung\n");
