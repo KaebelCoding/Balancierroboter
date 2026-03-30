@@ -14,7 +14,7 @@ using namespace MDO::ESP32ServoController;
 #define PinJoystickX 39 // Inputs - Joystick
 #define PinJoystickY 36
 #define PinX1 26        // Inputs - Touchscreensensor
-#define PinX2 33        // (is x1 the signal and x2 the ground/vcc?? -> maybe better naming possible)
+#define PinX2 33        // Evtl. erklärendere Variablennamen möglich
 #define PinY1 25
 #define PinY2 32
 #define PinServoX 14    // Outputs - Servos
