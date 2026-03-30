@@ -80,7 +80,7 @@ void loop() {
   measureTouchscreenXAxis();
   measureTouchscreenYAxis();
 
-  // Warum wird der Joystick ausgelesen, wenn der Joystickmodus vlt. gar nicht aktiv ist? Weil man mit dem Joystick den Zielpunkt der Steuerung verschieben kann.
+  // Hier wird der Joystick ausgelesen, weil mit ihm der Zielpunkt der Regelung verschoben werden kann.
   joystickAngleX = (joystickOffsetX - analogRead(PinJoystickX)) / 30.00;  // der empirische Wert hier sollte einen Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
   joystickAngleY = (joystickOffsetY - analogRead(PinJoystickY)) / 30.00;  // der empirische Wert hier sollte einen Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
   
