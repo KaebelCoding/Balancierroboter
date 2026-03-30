@@ -31,11 +31,11 @@ float joystickAngleTranslation = 0.65;  // Übersetzungsverhältnis zwischen Joy
 
 ServoController ServoX, ServoY;         // erzeuge Servo-Objekt um den Servomotor zu steuern
 float servoAngleX;
-float servoAngleY; 
+float servoAngleY;
 float servoOffsetX = 85.0;              // Servopositionen bei ungeneigter Ebene (bessere Bezeichnung als Offset möglich? Vlt. ZeroPosition? Oder EvenPlateAngle oder Balanced Plate Angle?)
 float servoOffsetY = 90.0;
 
-int touchX = 0, touchY = 0, touchXOld = -1, touchYOld = -1;  
+int touchX = 0, touchY = 0, touchXOld = -1, touchYOld = -1;
 uint32_t touchXTimer = 0, touchYTimer;
 float posX = 0, posY = 0;
 
