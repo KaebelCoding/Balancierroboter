@@ -82,7 +82,7 @@ void loop() {
 
   switch (mode) {
     case 0:
-      Serial.print ("Modus 1 - StandBy/An schalten\n");
+      Serial.print ("Modus 1 - StandBy\n");
       servoAngleX = 0;
       servoAngleY = 0;
       break;
@@ -132,18 +132,10 @@ void loop() {
     PIDY.setTunings(Kp, Ki, Kd);
 
     // Interface-Buttons auslesen und Modus setzen
-    if (not digitalRead(PinButtonPower)) {      // hier wird immer mit "not" gearbeitet, wäre es möglich hier auch ohne "not" zu arbeiten?
-      mode = 0;
-      Serial.println("Modus: An/Aus\n");
-    }
-    if (not digitalRead(PinButtonRegelbetrieb)) {
-      mode = 1;
-      Serial.println("Modus: Regelbetrieb\n");
-    }
-    if (not digitalRead(PinButtonJoysticksteuerung)) {
-      mode = 2;
-      Serial.println("Modus: Joysticksteuerung\n");
-    }
+    // Refactoring-Vorschlag: hier wird immer mit "not" gearbeitet, wäre es möglich hier auch ohne "not" zu arbeiten? Was gibt denn die digitalRead-Fkt. für einen Rückgabewert?
+    if (not digitalRead(PinButtonPower))              {mode = 0;}
+    if (not digitalRead(PinButtonRegelbetrieb))       {mode = 1;}
+    if (not digitalRead(PinButtonJoysticksteuerung))  {mode = 2;}
   }
 }
 
