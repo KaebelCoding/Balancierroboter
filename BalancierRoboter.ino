@@ -4,7 +4,7 @@
 
 using namespace MDO::ESP32ServoController;
 
-// === uC-Pin definition ===
+// === uC-Pin-Belegung ===
 #define PinButtonPower 15
 #define PinButtonRegelbetrieb 2
 #define PinButtonJoysticksteuerung 0
