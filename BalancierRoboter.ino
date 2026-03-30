@@ -65,11 +65,11 @@ void setup() {
 
   ServoFactoryDecorator oFactoryDecorator(oTimerChannelFactory);  // ServoFactoryDecorator definiert Servo-Frequenz und weiteres
   if (!ServoX.begin(oFactoryDecorator, PinServoX)) {
-    Serial.println("  failed to init the x-servo..\n");
+    Serial.println("Initiierung von X-Servomotor fehlgeschlagen.\n");
     return;
   }
-  if (!ServoY.begin(oFactoryDecorator, PinServoY)) {  //3rd parameter is the default angle to start from: 90 degrees in this case
-    Serial.println("  failed to init the y-servo..\n");
+  if (!ServoY.begin(oFactoryDecorator, PinServoY)) {
+    Serial.println("Initiierung von Y-Servomotor fehlgeschlagen.\n");
     return;
   }
   Serial.begin(115200); // Baud Rate = 115200, weil Joystick sonst verzögert reagiert 
