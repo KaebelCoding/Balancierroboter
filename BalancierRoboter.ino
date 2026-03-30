@@ -77,6 +77,11 @@ void setup() {
 
 // BETRIEB ----------------------------------------------------------------------------------------
 void loop() {
+    // Interface-Buttons auslesen und Modus setzen
+    // Refactoring-Vorschlag: hier wird immer mit "not" gearbeitet, wäre es möglich hier auch ohne "not" zu arbeiten? Was gibt denn die digitalRead-Fkt. für einen Rückgabewert?
+    if (not digitalRead(PinButtonPower))              {mode = 0;}
+    if (not digitalRead(PinButtonRegelbetrieb))       {mode = 1;}
+    if (not digitalRead(PinButtonJoysticksteuerung))  {mode = 2;}
 
   switch (mode) {
     case 0:
@@ -89,6 +94,18 @@ void loop() {
       measureTouchscreenXAxis();
       measureTouchscreenYAxis();
       measureJoystickAngles();
+      
+      // aktuelle Regelwerte berechnen (Potis werden ausgelesen)
+      if (every100ms > millis()) {                          // 10 mal pro Sekunde
+        every100ms = millis() + 100;
+        
+        Kp = (4096 -analogRead(PinPotiP)) * KpMax / 4096;   // evtl Möglichkeit finden feste Regelparameter einzustellen, z.B: Taste gedrückt halten 
+        Ki = (4096 -analogRead(PinPotiI)) * KiMax / 4096;   // Poti-Abfrage in Case Regelbetrieb verschieben 
+        Kd = (4096 -analogRead(PinPotiD)) * KdMax / 4096;   // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
+      }
+      PIDX.setTunings(Kp, Ki, Kd);
+      PIDY.setTunings(Kp, Ki, Kd);
+
       // Joystickwerte zum möglichen Verschieben des Zielpunktes
       servoAngleX = PIDX.run(posX, joystickAngleX * 3); // output = myPID.run(input, setpoint);
       servoAngleY = PIDY.run(posY, joystickAngleY * 3); // neue Zielwert-Variablen erstellen und probieren 
@@ -118,25 +135,6 @@ void loop() {
 
   ServoX.moveTo(servoAngleX + servoOffsetX, 0, false);
   ServoY.moveTo(servoAngleY + servoOffsetY, 0, false);
-
-  // 10 mal pro Sekunde wird:
-  if (every100ms > millis()) {
-    every100ms = millis() + 100;
-    
-  // aktuelle Regelwerte berechnen (Potis werden ausgelesen)
-    Kp = (4096 -analogRead(PinPotiP)) * KpMax / 4096;   // evtl Möglichkeit finden feste Regelparameter einzustellen, z.B: Taste gedrückt halten 
-    Ki = (4096 -analogRead(PinPotiI)) * KiMax / 4096;   // Poti-Abfrage in Case Regelbetrieb verschieben 
-    Kd = (4096 -analogRead(PinPotiD)) * KdMax / 4096;   // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
-
-    PIDX.setTunings(Kp, Ki, Kd);
-    PIDY.setTunings(Kp, Ki, Kd);
-
-    // Interface-Buttons auslesen und Modus setzen
-    // Refactoring-Vorschlag: hier wird immer mit "not" gearbeitet, wäre es möglich hier auch ohne "not" zu arbeiten? Was gibt denn die digitalRead-Fkt. für einen Rückgabewert?
-    if (not digitalRead(PinButtonPower))              {mode = 0;}
-    if (not digitalRead(PinButtonRegelbetrieb))       {mode = 1;}
-    if (not digitalRead(PinButtonJoysticksteuerung))  {mode = 2;}
-  }
 }
 
 // FUNKTIONEN ------------------------------------------------------------------------------------
