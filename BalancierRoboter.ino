@@ -65,11 +65,11 @@ void setup() {
 
   ServoFactoryDecorator oFactoryDecorator(oTimerChannelFactory);  //let this ServoFactoryDecorator define the servo frequency to use and such
   if (!ServoX.begin(oFactoryDecorator, PinServoX)) {              //3rd parameter is the default angle to start from: 90 degrees in this case
-    Serial.println("  failed to init the x-servo..");
+    Serial.println("  failed to init the x-servo..\n");
     return;
   }
   if (!ServoY.begin(oFactoryDecorator, PinServoY)) {  //3rd parameter is the default angle to start from: 90 degrees in this case
-    Serial.println("  failed to init the y-servo..");
+    Serial.println("  failed to init the y-servo..\n");
     return;
   }
   Serial.begin(115200); // Baud Rate = 115200, weil Joystick sonst verzögert reagiert 
@@ -92,12 +92,12 @@ void loop() {
 
   switch (mode) {
     case 0:
-      Serial.print ("Modus 1 - StandBy/An schalten \n");
+      Serial.print ("Modus 1 - StandBy/An schalten\n");
       servoAngleX = 0;
       servoAngleY = 0;
       break;
     case 1:
-      Serial.print ("Modus 2 - Regelbetrieb \n");
+      Serial.print ("Modus 2 - Regelbetrieb\n");
       // Warum werden Joystickwerte im Regelbetrieb verwendet? Sollte der Regelbetrieb nicht komplett entkoppelt vom Joystick sein?
       servoAngleX = PIDX.run(posX, joystickAngleX * 3); // output = myPID.run(input, setpoint);
       servoAngleY = PIDY.run(posY, joystickAngleY * 3); // neue Zielwert-Variablen erstellen und probieren 
@@ -112,7 +112,7 @@ void loop() {
       // Serial.print("\n");
       break;
     case 2:
-      Serial.print ("Modus 3 - Joysticksteuerung \n");
+      Serial.print ("Modus 3 - Joysticksteuerung\n");
       servoAngleX = joystickAngleX * joystickAngleTranslation;
       servoAngleY = joystickAngleY * joystickAngleTranslation;
       break;
@@ -142,15 +142,15 @@ void loop() {
     // Interface-Buttons auslesen und Modus setzen
     if (not digitalRead(PinButtonPower)) {      // hier wird immer mit "not" gearbeitet, wäre es möglich hier auch ohne "not" zu arbeiten?
       mode = 0;
-      Serial.println("Modus: An/Aus \n");
+      Serial.println("Modus: An/Aus\n");
     }
     if (not digitalRead(PinButtonRegelbetrieb)) {
       mode = 1;
-      Serial.println("Modus: Regelbetrieb \n");
+      Serial.println("Modus: Regelbetrieb\n");
     }
     if (not digitalRead(PinButtonJoysticksteuerung)) {
       mode = 2;
-      Serial.println("Modus: Joysticksteuerung \n");
+      Serial.println("Modus: Joysticksteuerung\n");
     }
   }
 }
