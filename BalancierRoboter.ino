@@ -162,7 +162,7 @@ void measureTouchscreenXAxis() {
     //Serial.print("0");
   }
   // Debugging
-  Serial.print("\t Calculated x-Position:\t");
+  Serial.print("\tCalculated x-Position:\t");
   Serial.print(posX);
   Serial.print("\n");
 }
@@ -192,7 +192,7 @@ void measureTouchscreenYAxis() {
     //Serial.print("0");
   }
   // Debugging
-  Serial.print("\t Calculated y-Position:\t");
+  Serial.print("\tCalculated y-Position:\t");
   Serial.print(posY);
   Serial.print("\n\n");
 }
