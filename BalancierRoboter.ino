@@ -89,6 +89,23 @@ void loop() {
       Serial.print ("Modus 1 - StandBy\n");
       servoAngleX = 0; // keine gerade Platte, sondern nur
       servoAngleY = 0; // Nullwinkel der Servos (-> beliebig)
+
+      Serial.print("P-Wert:");
+      Serial.print(Kp);
+      Serial.print("\tI-Wert:");
+      Serial.print(Ki);
+      Serial.print("\tD-Wert:");
+      Serial.print(Kd);
+      Serial.print("\n");
+
+      Serial.print("PotiP-Wert:");
+      Serial.print(PinPotiP);
+      Serial.print("\tPotiI-Wert:");
+      Serial.print(PinPotiI);
+      Serial.print("\tPotiD-Wert:");
+      Serial.print(PinPotiD);
+      Serial.print("\n");
+
       break;
     case 1:
       Serial.print ("Modus 2 - Regelbetrieb\n");
@@ -107,13 +124,7 @@ void loop() {
       PIDX.setTunings(Kp, Ki, Kd);
       PIDY.setTunings(Kp, Ki, Kd);
 
-      Serial.print("P-Wert:")
-      Serial.print(Kp);
-      Serial.print("\tI-Wert");
-      Serial.print(Ki);
-      Serial.print("\tD-Wert");
-      Serial.print(Kd);
-      Serial.print("\n");
+      
 
       // Joystickwerte zum möglichen Verschieben des Zielpunktes
       servoAngleX = PIDX.run(posX, joystickAngleX * 3); // output = myPID.run(input, setpoint);
