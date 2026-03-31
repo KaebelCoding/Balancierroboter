@@ -27,7 +27,8 @@ int joystickOffsetX = 1840;             // Joystickposition bei keiner Auslenkun
 int joystickOffsetY = 1821;             // genauere Bezeichnung hilfreich (Offset von was?)
 float joystickAngleX;
 float joystickAngleY;
-float joystickAngleTranslation = 0.65;  // Übersetzungsverhältnis zwischen Joystick- und Servowinkel
+float joystickAngleUseabilityScaling = 0.65;  // Übersetzungsverhältnis zwischen Joystick- und Servowinkel
+float TranslationADCValueToJoystickAngle = 30.0;
 
 ServoController ServoX, ServoY;         // erzeuge Servo-Objekt um den Servomotor zu steuern
 float servoAngleX;
@@ -38,9 +39,11 @@ float servoOffsetY = 90.0;
 int touchX = 0, touchY = 0, touchXOld = -1, touchYOld = -1;
 uint32_t touchXTimer = 0, touchYTimer;
 float posX = 0, posY = 0;
+int TouchScreenXOffsetToMiddle = 1877;
+int TouchScreenYOffsetToMiddle = 1992;
 
 float Kb = 0;
-float Kp, KpMax = 0.015;                  // ursprünglicher Wert = 1
+float Kp, KpMax = 0.015;                // ursprünglicher Wert = 1
 float Ki, KiMax = 0.002;                // ursprünglich = 0
 float Kd, KdMax = 0.1;                  // ursprünglich = 0.5
 
@@ -124,7 +127,7 @@ void loop() {
       PIDX.setTunings(KpMax, KiMax, KdMax);
       PIDY.setTunings(KpMax, KiMax, KdMax);
 
-            // Joystickwerte zum möglichen Verschieben des Zielpunktes
+      // Joystickwerte zum möglichen Verschieben des Zielpunktes
       servoAngleX = PIDX.run(posX, joystickAngleX * 3); // output = myPID.run(input, setpoint); alter setpoints 
       servoAngleY = PIDY.run(posY, joystickAngleY * 3); // neue Zielwert-Variablen erstellen und probieren 
                                                         // posX und posY: Abstände zum Zielwert (Plattenmitte)
@@ -140,8 +143,9 @@ void loop() {
     case 2:
       Serial.print ("Modus 3 - Joysticksteuerung\n");
       measureJoystickAngles();
-      servoAngleX = joystickAngleX * joystickAngleTranslation;
-      servoAngleY = joystickAngleY * joystickAngleTranslation;
+
+      servoAngleX = joystickAngleX * joystickAngleUseabilityScaling;
+      servoAngleY = joystickAngleY * joystickAngleUseabilityScaling;
 
       Serial.print("Servo X-Winkel:\t");
       Serial.print(servoAngleX);
@@ -161,8 +165,8 @@ void loop() {
 
   delay(20); // in ms
   // min. und max. Beschränkung der Servowinkel
-  servoAngleX = constrain(servoAngleX, -45, 45);
-  servoAngleY = constrain(servoAngleY, -45, 45);
+  servoAngleX = constrain(servoAngleX, -30, 30);
+  servoAngleY = constrain(servoAngleY, -30, 30);
 
   ServoX.moveTo(servoAngleX + servoOffsetX, 0, false);
   ServoY.moveTo(servoAngleY + servoOffsetY, 0, false);
@@ -189,11 +193,17 @@ void measureTouchscreenXAxis() {
   if (abs(touchX - touchXOld) < 100 || millis() > touchXTimer) {
     touchXTimer = millis() + 100;
     touchXOld = touchX;
-    posX = (touchX - 1877) * 0.121535; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
-    //Serial.print("0");
+    posX = (touchX - TouchScreenXOffsetToMiddle) * 0.121535; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
+    Serial.print("touchX: ");
+    Serial.print(touchX);
+    Serial.print("\ttouchXOld: ");
+    Serial.print(touchXOld);
+    Serial.print("\ttouchXTimer: ");
+    Serial.print(touchXTimer);
+    Serial.print("\n\n");
   }
   // Debugging
-  Serial.print("\t Calculated x-Position:\t");
+  Serial.print("\tCalculated x-Position:\t");
   Serial.print(posX);
   Serial.print("\n");
 }
@@ -219,18 +229,24 @@ void measureTouchscreenYAxis() {
   if (abs(touchY - touchYOld) < 100 || millis() > touchYTimer) {
     touchYTimer = millis() + 100;
     touchYOld = touchY;
-    posY = (touchY - 1992) * 0.10280; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
-    //Serial.print("0");
+    posY = (touchY - TouchScreenYOffsetToMiddle) * 0.10280; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
+    Serial.print("touchY: ");
+    Serial.print(touchY);
+    Serial.print("\ttouchYOld: ");
+    Serial.print(touchYOld);
+    Serial.print("\ttouchYTimer: ");
+    Serial.print(touchYTimer);
+    Serial.print("\n\n");
   }
   // Debugging
-  Serial.print("\t Calculated y-Position:\t");
+  Serial.print("\tCalculated y-Position:\t");
   Serial.print(posY);
   Serial.print("\n\n");
 }
 
 void measureJoystickAngles() {
-  joystickAngleX = (joystickOffsetX - analogRead(PinJoystickX)) / 30.00;  // der empirische Wert hier sollte einen Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
-  joystickAngleY = (joystickOffsetY - analogRead(PinJoystickY)) / 30.00;  // der empirische Wert hier sollte einen Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
+  joystickAngleX = (joystickOffsetX - analogRead(PinJoystickX)) / TranslationADCValueToJoystickAngle;  // der empirische Wert hier sollte einen Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
+  joystickAngleY = (joystickOffsetY - analogRead(PinJoystickY)) / TranslationADCValueToJoystickAngle;  // der empirische Wert hier sollte einen Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
   Serial.print("Joysitck X-Winkel:\t");
   Serial.print(joystickAngleX);
   Serial.print("\tJoysitck Y-Winkel:\t");
