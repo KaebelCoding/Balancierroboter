@@ -132,8 +132,8 @@ void loop() {
 
   delay(20); // in ms
   // min. und max. Beschränkung der Servowinkel
-  servoAngleX = constrain(servoAngleX, -45, 45);
-  servoAngleY = constrain(servoAngleY, -45, 45);
+  servoAngleX = constrain(servoAngleX, -30, 30);
+  servoAngleY = constrain(servoAngleY, -30, 30);
 
   ServoX.moveTo(servoAngleX + servoOffsetX, 0, false);
   ServoY.moveTo(servoAngleY + servoOffsetY, 0, false);
