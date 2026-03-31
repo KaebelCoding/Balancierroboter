@@ -27,7 +27,8 @@ int joystickOffsetX = 1840;             // Joystickposition bei keiner Auslenkun
 int joystickOffsetY = 1821;             // genauere Bezeichnung hilfreich (Offset von was?)
 float joystickAngleX;
 float joystickAngleY;
-float joystickAngleTranslation = 0.65;  // Übersetzungsverhältnis zwischen Joystick- und Servowinkel
+float joystickAngleUseabilityScaling = 0.65;  // Übersetzungsverhältnis zwischen Joystick- und Servowinkel
+float TranslationADCValueToJoystickAngle = 30.0;
 
 ServoController ServoX, ServoY;         // erzeuge Servo-Objekt um den Servomotor zu steuern
 float servoAngleX;
@@ -124,8 +125,8 @@ void loop() {
     case 2:
       Serial.print ("Modus 3 - Joysticksteuerung\n");
       measureJoystickAngles();
-      servoAngleX = joystickAngleX * joystickAngleTranslation;
-      servoAngleY = joystickAngleY * joystickAngleTranslation;
+      servoAngleX = joystickAngleX * joystickAngleUseabilityScaling;
+      servoAngleY = joystickAngleY * joystickAngleUseabilityScaling;
       break;
   }
   Serial.print("\n");
@@ -212,8 +213,8 @@ void measureTouchscreenYAxis() {
 }
 
 void measureJoystickAngles() {
-  joystickAngleX = (joystickOffsetX - analogRead(PinJoystickX)) / 30.00;  // der empirische Wert hier sollte einen Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
-  joystickAngleY = (joystickOffsetY - analogRead(PinJoystickY)) / 30.00;  // der empirische Wert hier sollte einen Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
+  joystickAngleX = (joystickOffsetX - analogRead(PinJoystickX)) / TranslationADCValueToJoystickAngle;  // der empirische Wert hier sollte einen Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
+  joystickAngleY = (joystickOffsetY - analogRead(PinJoystickY)) / TranslationADCValueToJoystickAngle;  // der empirische Wert hier sollte einen Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
   // Serial.print("Joysitck X-Winkel:\t");
   // Serial.print(joystickAngleX);
   // Serial.print("\tJoysitck Y-Winkel:\t");
