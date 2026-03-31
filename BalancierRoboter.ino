@@ -38,6 +38,8 @@ float servoOffsetY = 90.0;
 int touchX = 0, touchY = 0, touchXOld = -1, touchYOld = -1;
 uint32_t touchXTimer = 0, touchYTimer;
 float posX = 0, posY = 0;
+int TouchScreenXOffsetToMiddle = 1877;
+int TouchScreenYOffsetToMiddle = 1992;
 
 float Kb = 0;
 float Kp, KpMax = 0.2;                  // ursprünglicher Wert = 1
@@ -158,8 +160,14 @@ void measureTouchscreenXAxis() {
   if (abs(touchX - touchXOld) < 100 || millis() > touchXTimer) {
     touchXTimer = millis() + 100;
     touchXOld = touchX;
-    posX = (touchX - 1877) * 0.121535; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
-    //Serial.print("0");
+    posX = (touchX - TouchScreenXOffsetToMiddle) * 0.121535; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
+    Serial.print("touchX: ");
+    Serial.print(touchX);
+    Serial.print("\ttouchXOld: ");
+    Serial.print(touchXOld);
+    Serial.print("\ttouchXTimer: ");
+    Serial.print(touchXTimer);
+    Serial.print("\n\n");
   }
   // Debugging
   Serial.print("\tCalculated x-Position:\t");
@@ -188,8 +196,14 @@ void measureTouchscreenYAxis() {
   if (abs(touchY - touchYOld) < 100 || millis() > touchYTimer) {
     touchYTimer = millis() + 100;
     touchYOld = touchY;
-    posY = (touchY - 1992) * 0.10280; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
-    //Serial.print("0");
+    posY = (touchY - TouchScreenYOffsetToMiddle) * 0.10280; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
+    Serial.print("touchY: ");
+    Serial.print(touchY);
+    Serial.print("\ttouchYOld: ");
+    Serial.print(touchYOld);
+    Serial.print("\ttouchYTimer: ");
+    Serial.print(touchYTimer);
+    Serial.print("\n\n");
   }
   // Debugging
   Serial.print("\tCalculated y-Position:\t");
