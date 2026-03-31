@@ -40,9 +40,9 @@ uint32_t touchXTimer = 0, touchYTimer;
 float posX = 0, posY = 0;
 
 float Kb = 0;
-float Kp, KpMax = 0.2;                  // ursprünglicher Wert = 1
-float Ki, KiMax = 0.002;                // ursprünglich = 0
-float Kd, KdMax = 0.1;                  // ursprünglich = 0.5
+float Kp, KpMax = 1;                  // ursprünglicher Wert = 1
+float Ki, KiMax = 0;                // ursprünglich = 0
+float Kd, KdMax = 0.5;                  // ursprünglich = 0.5
 
 AdvancedPID PIDX(Kp, Ki, Kd, Kb);       // PID-Regler für X-Achse
 AdvancedPID PIDY(Kp, Ki, Kd, Kb);       // PID-Regler für Y-Achse
@@ -79,6 +79,7 @@ void setup() {
 void loop() {
     // Interface-Buttons auslesen und Modus setzen
     // Refactoring-Vorschlag: hier wird immer mit "not" gearbeitet, wäre es möglich hier auch ohne "not" zu arbeiten? Was gibt denn die digitalRead-Fkt. für einen Rückgabewert?
+    
     if (not digitalRead(PinButtonPower))              {mode = 0;}
     if (not digitalRead(PinButtonRegelbetrieb))       {mode = 1;}
     if (not digitalRead(PinButtonJoysticksteuerung))  {mode = 2;}
@@ -96,9 +97,9 @@ void loop() {
       measureJoystickAngles();
       
       // aktuelle Regelwerte berechnen (Potis werden ausgelesen)
-      if (every100ms > millis()) {                          // 10 mal pro Sekunde
+      if (every100ms < millis()) {                          // 10 mal pro Sekunde
         every100ms = millis() + 100;
-        
+       
         Kp = (4096 -analogRead(PinPotiP)) * KpMax / 4096;   // evtl Möglichkeit finden feste Regelparameter einzustellen, z.B: Taste gedrückt halten 
         Ki = (4096 -analogRead(PinPotiI)) * KiMax / 4096;   // Poti-Abfrage in Case Regelbetrieb verschieben 
         Kd = (4096 -analogRead(PinPotiD)) * KdMax / 4096;   // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
@@ -124,6 +125,12 @@ void loop() {
       measureJoystickAngles();
       servoAngleX = joystickAngleX * joystickAngleTranslation;
       servoAngleY = joystickAngleY * joystickAngleTranslation;
+      Serial.print("\tServo X-Winkel:\t"); //added
+      Serial.print(servoAngleX);
+      Serial.print("Servo Y-Winkel:\t");
+      Serial.print(servoAngleY);
+      Serial.print("\n");
+
       break;
   }
   Serial.print("\n");
@@ -200,9 +207,9 @@ void measureTouchscreenYAxis() {
 void measureJoystickAngles() {
   joystickAngleX = (joystickOffsetX - analogRead(PinJoystickX)) / 30.00;  // der empirische Wert hier sollte einen Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
   joystickAngleY = (joystickOffsetY - analogRead(PinJoystickY)) / 30.00;  // der empirische Wert hier sollte einen Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
-  // Serial.print("Joysitck X-Winkel:\t");
-  // Serial.print(joystickAngleX);
-  // Serial.print("\tJoysitck Y-Winkel:\t");
-  // Serial.print(joystickAngleY);
-  // Serial.print("\n");
+  Serial.print("Joysitck X-Winkel:\t");
+  Serial.print(joystickAngleX);
+  Serial.print("\tJoysitck Y-Winkel:\t");
+  Serial.print(joystickAngleY);
+  Serial.print("\n");
 }
