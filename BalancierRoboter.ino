@@ -40,7 +40,7 @@ uint32_t touchXTimer = 0, touchYTimer;
 float posX = 0, posY = 0;
 
 float Kb = 0;
-float Kp, KpMax = 0.2;                  // ursprünglicher Wert = 1
+float Kp, KpMax = 0.015;                  // ursprünglicher Wert = 1
 float Ki, KiMax = 0.002;                // ursprünglich = 0
 float Kd, KdMax = 0.1;                  // ursprünglich = 0.5
 
@@ -90,21 +90,21 @@ void loop() {
       servoAngleX = 0; // keine gerade Platte, sondern nur
       servoAngleY = 0; // Nullwinkel der Servos (-> beliebig)
 
-      Serial.print("P-Wert:");
-      Serial.print(Kp);
-      Serial.print("\tI-Wert:");
-      Serial.print(Ki);
-      Serial.print("\tD-Wert:");
-      Serial.print(Kd);
-      Serial.print("\n");
+      // Serial.print("P-Wert:");
+      // Serial.print(Kp);
+      // Serial.print("\tI-Wert:");
+      // Serial.print(Ki);
+      // Serial.print("\tD-Wert:");
+      // Serial.print(Kd);
+      // Serial.print("\n");
 
-      Serial.print("PotiP-Wert:");
-      Serial.print(PinPotiP);
-      Serial.print("\tPotiI-Wert:");
-      Serial.print(PinPotiI);
-      Serial.print("\tPotiD-Wert:");
-      Serial.print(PinPotiD);
-      Serial.print("\n");
+      // Serial.print("PotiP-Wert:");
+      // Serial.print(analogRead(PinPotiP));
+      // Serial.print("\tPotiI-Wert:");
+      // Serial.print(analogRead(PinPotiI));
+      // Serial.print("\tPotiD-Wert:");
+      // Serial.print(analogRead(PinPotiD));
+      // Serial.print("\n");
 
       break;
     case 1:
@@ -121,13 +121,11 @@ void loop() {
         Ki = (4096 -analogRead(PinPotiI)) * KiMax / 4096;   // Poti-Abfrage in Case Regelbetrieb verschieben 
         Kd = (4096 -analogRead(PinPotiD)) * KdMax / 4096;   // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
       }
-      PIDX.setTunings(Kp, Ki, Kd);
-      PIDY.setTunings(Kp, Ki, Kd);
+      PIDX.setTunings(KpMax, KiMax, KdMax);
+      PIDY.setTunings(KpMax, KiMax, KdMax);
 
-      
-
-      // Joystickwerte zum möglichen Verschieben des Zielpunktes
-      servoAngleX = PIDX.run(posX, joystickAngleX * 3); // output = myPID.run(input, setpoint);
+            // Joystickwerte zum möglichen Verschieben des Zielpunktes
+      servoAngleX = PIDX.run(posX, joystickAngleX * 3); // output = myPID.run(input, setpoint); alter setpoints 
       servoAngleY = PIDY.run(posY, joystickAngleY * 3); // neue Zielwert-Variablen erstellen und probieren 
                                                         // posX und posY: Abstände zum Zielwert (Plattenmitte)
                                                         // joystickAngle: mögliche Verschiebung des Zielpunktes durch Joystick
@@ -144,11 +142,18 @@ void loop() {
       measureJoystickAngles();
       servoAngleX = joystickAngleX * joystickAngleTranslation;
       servoAngleY = joystickAngleY * joystickAngleTranslation;
-      Serial.print("\tServo X-Winkel:\t"); //added
+
+      Serial.print("Servo X-Winkel:\t");
       Serial.print(servoAngleX);
       Serial.print("Servo Y-Winkel:\t");
       Serial.print(servoAngleY);
       Serial.print("\n");
+      
+      // Serial.print("Joysitck Offset X:");
+      // Serial.print(analogRead(PinJoystickX));
+      // Serial.print("\tJoysitck Offset Y:");
+      // Serial.print(analogRead(PinJoystickY));
+      // Serial.print("\n");
 
       break;
   }
