@@ -40,9 +40,9 @@ uint32_t touchXTimer = 0, touchYTimer;
 float posX = 0, posY = 0;
 
 float Kb = 0;
-float Kp, KpMax = 1;                  // ursprünglicher Wert = 1
-float Ki, KiMax = 0;                // ursprünglich = 0
-float Kd, KdMax = 0.5;                  // ursprünglich = 0.5
+float Kp, KpMax = 0.2;                  // ursprünglicher Wert = 1
+float Ki, KiMax = 0.002;                // ursprünglich = 0
+float Kd, KdMax = 0.1;                  // ursprünglich = 0.5
 
 AdvancedPID PIDX(Kp, Ki, Kd, Kb);       // PID-Regler für X-Achse
 AdvancedPID PIDY(Kp, Ki, Kd, Kb);       // PID-Regler für Y-Achse
@@ -106,6 +106,14 @@ void loop() {
       }
       PIDX.setTunings(Kp, Ki, Kd);
       PIDY.setTunings(Kp, Ki, Kd);
+
+      Serial.print("P-Wert:")
+      Serial.print(Kp);
+      Serial.print("\tI-Wert");
+      Serial.print(Ki);
+      Serial.print("\tD-Wert");
+      Serial.print(Kd);
+      Serial.print("\n");
 
       // Joystickwerte zum möglichen Verschieben des Zielpunktes
       servoAngleX = PIDX.run(posX, joystickAngleX * 3); // output = myPID.run(input, setpoint);
