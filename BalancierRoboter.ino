@@ -5,12 +5,12 @@
 using namespace MDO::ESP32ServoController;
 
 // === uC-Pin-Belegung ===
-#define PinButtonPower 15
-#define PinButtonRegelbetrieb 2
-#define PinButtonJoysticksteuerung 0
-#define PinPotiP 16
-#define PinPotiI 17
-#define PinPotiD 5
+#define PinButtonPower 5
+#define PinButtonRegelbetrieb 17
+#define PinButtonJoysticksteuerung 16
+#define PinPotiP 0
+#define PinPotiI 2
+#define PinPotiD 15
 #define PinJoystickX 39                 // Inputs - Joystick
 #define PinJoystickY 36
 #define PinX1 26                        // Inputs - Touchscreensensor
@@ -190,7 +190,7 @@ void measureTouchscreenXAxis() {
   Serial.print("Touchscreen x-Position:\t");
   Serial.print(touchX);
 
-  if (abs(touchX - touchXOld) < 100 || millis() > touchXTimer) {
+  if (abs(touchX - touchXOld) < 100 || millis() > touchXTimer) {  // ODER zu UND zurückändern
     touchXTimer = millis() + 100;
     touchXOld = touchX;
     posX = (touchX - TouchScreenXOffsetToMiddle) * 0.121535; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
