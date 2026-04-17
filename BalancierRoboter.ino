@@ -8,8 +8,8 @@ using namespace MDO::ESP32ServoController;
 #define PinButtonPower 16
 #define PinButtonRegelbetrieb 17
 #define PinButtonJoysticksteuerung 5
-#define PinLEDPower 23
-#define PinLEDRegelbetrieb 22
+#define PinLEDPower 22
+#define PinLEDRegelbetrieb 23
 #define PinLEDJoysticksteuerung 21
 #define PinPotiP 4
 #define PinPotiI 2
