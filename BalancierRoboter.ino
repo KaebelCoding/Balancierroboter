@@ -8,16 +8,19 @@ using namespace MDO::ESP32ServoController;
 #define PinButtonPower 16
 #define PinButtonRegelbetrieb 17
 #define PinButtonJoysticksteuerung 5
+#define PinLEDPower 23
+#define PinLEDRegelbetrieb 22
+#define PinLEDJoysticksteuerung 21
 #define PinPotiP 4
 #define PinPotiI 2
 #define PinPotiD 0
 #define PinJoystickX 39                 // Inputs - Joystick
 #define PinJoystickY 36
-#define PinX1 26                        // Inputs - Touchscreensensor
-#define PinX2 33                        // Evtl. erklärendere Variablennamen möglich
+#define PinX1 26                        // Touchscreensensor (evtl. erklärendere Variablennamen möglich)
+#define PinX2 33
 #define PinY1 25
 #define PinY2 32
-#define PinServoX 14                    // Outputs - Servos
+#define PinServoX 14                    // Output-Pins - Servos
 #define PinServoY 12
 
 uint8_t mode = 0;                       // Startet in StandBy (Modus 1 von 3)
@@ -60,6 +63,9 @@ void setup() {
   pinMode(PinButtonPower, INPUT_PULLUP);
   pinMode(PinButtonRegelbetrieb, INPUT_PULLUP);
   pinMode(PinButtonJoysticksteuerung, INPUT_PULLUP);
+  pinMode(PinLEDPower, OUTPUT);
+  pinMode(PinLEDRegelbetrieb, OUTPUT);
+  pinMode(PinLEDJoysticksteuerung, OUTPUT);
   pinMode(PinPotiP, INPUT);
   pinMode(PinPotiI, INPUT);
   pinMode(PinPotiD, INPUT);
@@ -81,6 +87,20 @@ void setup() {
     Serial.println("Initiierung von Y-Servomotor fehlgeschlagen.\n");
     return;
   }
+
+  digitalWrite(PinLEDPower, LOW);
+  digitalWrite(PinLEDRegelbetrieb, LOW);
+  digitalWrite(PinLEDJoysticksteuerung, LOW);
+  delay(300);
+  digitalWrite(PinLEDPower, HIGH);
+  digitalWrite(PinLEDRegelbetrieb, HIGH);
+  digitalWrite(PinLEDJoysticksteuerung, HIGH);
+  delay(300);
+  digitalWrite(PinLEDPower, HIGH);
+  digitalWrite(PinLEDRegelbetrieb, LOW);
+  digitalWrite(PinLEDJoysticksteuerung, LOW);
+  delay(300);
+
   Serial.begin(115200); // Baud Rate = 115200, weil Joystick sonst verzögert reagiert 
 }
 
@@ -88,14 +108,33 @@ void setup() {
 void loop() {
     // Interface-Buttons auslesen und Modus setzen
     // Refactoring-Vorschlag: hier wird immer mit "not" gearbeitet, wäre es möglich hier auch ohne "not" zu arbeiten? Was gibt denn die digitalRead-Fkt. für einen Rückgabewert?
-    
-    if (not digitalRead(PinButtonPower))              {mode = 0;}
-    if (not digitalRead(PinButtonRegelbetrieb))       {mode = 1;}
-    if (not digitalRead(PinButtonJoysticksteuerung))  {mode = 2;}
+    if (not digitalRead(PinButtonPower)) {
+      mode = 0;
+      Serial.print ("Modus 1 - StandBy\n");
+
+      digitalWrite(PinLEDPower, HIGH);
+      digitalWrite(PinLEDRegelbetrieb, LOW);
+      digitalWrite(PinLEDJoysticksteuerung, LOW);
+    }
+    if (not digitalRead(PinButtonRegelbetrieb)) {
+      mode = 1;
+      Serial.print ("Modus 2 - Regelbetrieb\n");
+
+      digitalWrite(PinLEDPower, LOW);
+      digitalWrite(PinLEDRegelbetrieb, HIGH);
+      digitalWrite(PinLEDJoysticksteuerung, LOW);
+    }
+    if (not digitalRead(PinButtonJoysticksteuerung)) {
+      mode = 2;
+      Serial.print ("Modus 3 - Joysticksteuerung\n");
+
+      digitalWrite(PinLEDPower, LOW);
+      digitalWrite(PinLEDRegelbetrieb, LOW);
+      digitalWrite(PinLEDJoysticksteuerung, HIGH);
+      }
 
   switch (mode) {
     case 0:
-      Serial.print ("Modus 1 - StandBy\n");
       servoAngleX = 0; // keine gerade Platte, sondern nur
       servoAngleY = 0; // Nullwinkel der Servos (-> beliebig)
 
@@ -116,7 +155,6 @@ void loop() {
 
       break;
     case 1:
-      Serial.print ("Modus 2 - Regelbetrieb\n");
       measureTouchscreenXAxis();
       measureTouchscreenYAxis();
       measureJoystickAngles();
@@ -157,7 +195,6 @@ void loop() {
       Serial.print("\n");
       break;
     case 2:
-      Serial.print ("Modus 3 - Joysticksteuerung\n");
       measureJoystickAngles();
 
       servoAngleX = joystickAngleX * joystickAngleUseabilityScaling;
