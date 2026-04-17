@@ -47,7 +47,7 @@ int TouchScreenYOffsetToMiddle = 1992;
 
 float RegelungszielX;
 float RegelungszielY;
-float ServoSprungbegrenzung = 15; 
+float ServoSprungbegrenzung = 15; // Idee: raduisabhängig erhöhen/verringern
 static float ServoAngleXRecent = 0;
 static float ServoAngleYRecent = 0;
 
@@ -162,23 +162,25 @@ void loop() {
       // aktuelle Reglerparameter berechnen (Potis werden ausgelesen)
       if (every100ms < millis()) {                          // 10 mal pro Sekunde
         every100ms = millis() + 100;       
-        Kp = (4096 -analogRead(PinPotiP)) * KpMax / 4096;   // evtl Möglichkeit finden feste Regelparameter einzustellen, z.B: Taste gedrückt halten 
+        Kp = (4096 -analogRead(PinPotiP)) * KpMax / 4096;   // evtl Möglichkeit finden feste Regelparameter einzustellen, z.B: Taste gedrückt halten
+        // WIEDER ZURÜCKÄNDERN!!!
         Ki = 0.001;   // ursprünglich: (4096 -analogRead(PinPotiI)) * KiMax / 4096
         Kd = (4096 -analogRead(PinPotiI)) * KdMax / 4096;   // Poti fehlt -> Ki fester Wert und Kd auf Poti ursprünglich: (4096 -analogRead(PinPotiD)) * KdMax / 4096
+        // WIEDER ZURÜCKÄNDERN!!!
       }
 
       PIDX.setTunings(Kp, Ki, Kd);
       PIDY.setTunings(Kp, Ki, Kd);
       PIDX.setDerivativeFilter(0.8);
       PIDY.setDerivativeFilter(0.8);
-      PIDX.setIntegralZone(10);
+      PIDX.setIntegralZone(10);  // setzt I-Anteil auf bestimmten Bereich fest
       PIDY.setIntegralZone(10);
       RegelungszielX = joystickAngleX * 3;  // Joystickwerte zum möglichen Verschieben des Zielpunktes
       RegelungszielY = joystickAngleY * 3;  
 
       servoAngleX = PIDX.run(posX, RegelungszielX); // output = myPID.run(input, setpoint) bzw. abweichung = .run(istwert, führungsgröße)
       servoAngleY = PIDY.run(posY, RegelungszielY);
-      ServoStabilisierung();
+      ServoStabilisierung();  // glättet zu starke Sprünge
 
       Serial.print("X-Position: ");
       Serial.print(posX);
@@ -247,6 +249,7 @@ void measureTouchscreenXAxis() {
       
     touchXTimer = millis() + 100;
     posX = (touchX - TouchScreenXOffsetToMiddle) * 0.121535; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
+    // wir möchten einen voraussichtlichen Positionsterm dazunemhmen für die Hangabtriebskraft: benötigt Kugelmass (100 g), Neigung der Ebene, Zeit zwischen Sensormessungen 
     touchXOld = touchX; // mit Filter: (touchXOld - TouchScreenXOffsetToMiddle) * 0.121535 * 0.9 + (touchX - TouchScreenXOffsetToMiddle) * 0.121535 * 0.1
     Serial.print("\ttouchX: ");
     Serial.print(touchX);
@@ -283,6 +286,7 @@ void measureTouchscreenYAxis() {
     
     touchYTimer = millis() + 100;
     posY = (touchY - TouchScreenYOffsetToMiddle) * 0.10280; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
+    // wir möchten einen voraussichtlichen Positionsterm dazunemhmen für die Hangabtriebskraft: benötigt Kugelmass (100 g), Neigung der Ebene, Zeit zwischen Sensormessungen 
     touchYOld = touchY; // mit Filter: (touchYOld - TouchScreenYOffsetToMiddle) * 0.10280 * 0.8 + (touchY - TouchScreenYOffsetToMiddle) * 0.10280 * 0.2
     Serial.print("\ttouchY: ");
     Serial.print(touchY);
