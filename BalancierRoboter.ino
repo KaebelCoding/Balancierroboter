@@ -200,7 +200,7 @@ void loop() {
       measureJoystickAngles();
 
       servoAngleX = joystickAngleX * joystickAngleUseabilityScaling;
-      servoAngleY = joystickAngleY * joystickAngleUseabilityScaling;
+      servoAngleY = -joystickAngleY * joystickAngleUseabilityScaling;
 
       Serial.print("Servo X-Winkel:\t");
       Serial.print(servoAngleX);
