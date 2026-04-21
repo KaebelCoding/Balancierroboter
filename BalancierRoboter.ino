@@ -14,29 +14,31 @@ using namespace MDO::ESP32ServoController;
 #define PinPotiP 4
 #define PinPotiI 2
 #define PinPotiD 0
-#define PinJoystickX 39                 // Inputs - Joystick
+#define PinJoystickX 39                           // Inputs - Joystick
 #define PinJoystickY 36
-#define PinX1 26                        // Touchscreensensor (evtl. erklärendere Variablennamen möglich)
+#define PinX1 26                                  // Touchscreensensor (evtl. erklärendere Variablennamen möglich)
 #define PinX2 33
 #define PinY1 25
 #define PinY2 32
-#define PinServoX 14                    // Output-Pins - Servos
+#define PinServoX 14                              // Output-Pins - Servos
 #define PinServoY 12
 
-uint8_t mode = 0;                       // Startet in StandBy (Modus 1 von 3)
+// === Systemvariablen ===
+uint8_t mode = 0;                                 // Startet in StandBy (Modus 1 von 3)
 long every100ms = 100;
 
-int joystickOffsetX = 1840;             // Joystickposition bei keiner Auslenkung
-int joystickOffsetY = 1821;             // genauere Bezeichnung hilfreich (Offset von was?)
+// === Prozessvariablen ===
+int joystickOffsetX = 1840;                       // Joystickposition bei keiner Auslenkung
+int joystickOffsetY = 1821;                       // genauere Bezeichnung hilfreich (Offset von was?)
 float joystickAngleX;
 float joystickAngleY;
-float joystickAngleUseabilityScaling = 0.65;  // Übersetzungsverhältnis zwischen Joystick- und Servowinkel
+float joystickAngleUseabilityScaling = 0.65;      // Übersetzungsverhältnis zwischen Joystick- und Servowinkel
 float TranslationADCValueToJoystickAngle = 30.0;
 
-ServoController ServoX, ServoY;         // erzeuge Servo-Objekt um den Servomotor zu steuern
+ServoController ServoX, ServoY;                   // erzeuge Servo-Objekt um den Servomotor zu steuern
 float servoAngleX;
 float servoAngleY;
-float servoOffsetX = 85.0;              // Servopositionen bei ungeneigter Ebene (bessere Bezeichnung als Offset möglich? Vlt. ZeroPosition? Oder EvenPlateAngle oder Balanced Plate Angle?)
+float servoOffsetX = 85.0;                        // Servopositionen bei ungeneigter Ebene (bessere Bezeichnung als Offset möglich? Vlt. ZeroPosition? Oder EvenPlateAngle oder Balanced Plate Angle?)
 float servoOffsetY = 90.0;
 
 int touchX = 0, touchY = 0, touchXOld = -1, touchYOld = -1;
@@ -47,14 +49,14 @@ int TouchScreenYOffsetToMiddle = 1992;
 
 float RegelungszielX;
 float RegelungszielY;
-float ServoSprungbegrenzung = 15; // Idee: raduisabhängig erhöhen/verringern
+float ServoSprungbegrenzung = 15;                 // Idee: raduisabhängig erhöhen/verringern
 static float ServoAngleXRecent = 0;
 static float ServoAngleYRecent = 0;
 
 float Kb = 0;
-float Kp, KpMax = 0.24;                
-float Ki, KiMax = 0.005;                
-float Kd, KdMax = 0.125;                  
+float Kp, KpMax = 0.24;
+float Ki, KiMax = 0.005;
+float Kd, KdMax = 0.125;
 
 AdvancedPID PIDX(Kp, Ki, Kd, Kb);       
 AdvancedPID PIDY(Kp, Ki, Kd, Kb);       
@@ -163,24 +165,22 @@ void loop() {
       if (every100ms < millis()) {                          // 10 mal pro Sekunde
         every100ms = millis() + 100;       
         Kp = (4096 -analogRead(PinPotiP)) * KpMax / 4096;   // evtl Möglichkeit finden feste Regelparameter einzustellen, z.B: Taste gedrückt halten
-        // WIEDER ZURÜCKÄNDERN!!!
-        Ki = 0.001;   // ursprünglich: (4096 -analogRead(PinPotiI)) * KiMax / 4096
-        Kd = (4096 -analogRead(PinPotiI)) * KdMax / 4096;   // Poti fehlt -> Ki fester Wert und Kd auf Poti ursprünglich: (4096 -analogRead(PinPotiD)) * KdMax / 4096
-        // WIEDER ZURÜCKÄNDERN!!!
+        Ki = (4096 -analogRead(PinPotiI)) * KiMax / 4096;
+        Kd = (4096 -analogRead(PinPotiD)) * KdMax / 4096;   // Poti fehlt -> Ki fester Wert und Kd auf Poti ursprünglich: (4096 -analogRead(PinPotiD)) * KdMax / 4096
       }
 
       PIDX.setTunings(Kp, Ki, Kd);
       PIDY.setTunings(Kp, Ki, Kd);
       PIDX.setDerivativeFilter(0.8);
       PIDY.setDerivativeFilter(0.8);
-      PIDX.setIntegralZone(10);  // setzt I-Anteil auf bestimmten Bereich fest
+      PIDX.setIntegralZone(10);               // setzt I-Anteil auf bestimmten Bereich fest
       PIDY.setIntegralZone(10);
-      RegelungszielX = joystickAngleX * 3;  // Joystickwerte zum möglichen Verschieben des Zielpunktes
+      RegelungszielX = joystickAngleX * 3;    // Joystickwerte zum möglichen Verschieben des Zielpunktes
       RegelungszielY = joystickAngleY * 3;  
 
       servoAngleX = PIDX.run(posX, RegelungszielX); // output = myPID.run(input, setpoint) bzw. abweichung = .run(istwert, führungsgröße)
       servoAngleY = PIDY.run(posY, RegelungszielY);
-      ServoStabilisierung();  // glättet zu starke Sprünge
+      ServoStabilisierung();                        // glättet zu starke Sprünge
 
       Serial.print("X-Position: ");
       Serial.print(posX);
