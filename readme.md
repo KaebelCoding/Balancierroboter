@@ -2,7 +2,7 @@
 
 Dieses Projekt ist der Quellcode für einen Balancierroboter mit einem Ball auf einer Kippplatte.
 
-![](images/Balancierroboter.jpg)
+![](images/Balancierroboter1.jpg)
 
 ### Verwendete Hardware
 
