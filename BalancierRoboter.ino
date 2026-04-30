@@ -13,7 +13,7 @@ using namespace MDO::ESP32ServoController;
 #define PinLEDJoysticksteuerung 21
 #define PinPotiP 4
 #define PinPotiI 2
-#define PinPotiD 0
+#define PinPotiD 18
 #define PinJoystickX 39                           // Inputs - Joystick
 #define PinJoystickY 36
 #define PinX1 26                                  // Touchscreensensor (evtl. erklärendere Variablennamen möglich)
