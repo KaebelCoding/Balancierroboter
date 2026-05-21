@@ -1,4 +1,4 @@
-// INITIALISIERUNG --------------------------------------------------------------------------------
+// BIBLIOTHEKEN --------------------------------------------------------------------------------
 #include <ESP32ServoController.h>
 #include "AdvancedPID.h"
 
@@ -25,11 +25,13 @@ using namespace MDO::ESP32ServoController;
 
 // === Systemvariablen ===
 uint8_t mode = 0;                                 // Startet in StandBy (Modus 1 von 3)
-long every100ms = 100;
+long TimerIntervall = 20;                        // Frequenzgebende Variable
+long RecentControl = 0;
+long RecentPotiReading = 0; 
 
 // === Prozessvariablen ===
 int joystickOffsetX = 1840;                       // Joystickposition bei keiner Auslenkung
-int joystickOffsetY = 1821;                       // genauere Bezeichnung hilfreich (Offset von was?)
+int joystickOffsetY = 1821;                       
 float joystickAngleX;
 float joystickAngleY;
 float joystickAngleUseabilityScaling = 0.65;      // Übersetzungsverhältnis zwischen Joystick- und Servowinkel
@@ -38,7 +40,7 @@ float TranslationADCValueToJoystickAngle = 30.0;
 ServoController ServoX, ServoY;                   // erzeuge Servo-Objekt um den Servomotor zu steuern
 float servoAngleX;
 float servoAngleY;
-float servoOffsetX = 85.0;                        // Servopositionen bei ungeneigter Ebene (bessere Bezeichnung als Offset möglich? Vlt. ZeroPosition? Oder EvenPlateAngle oder Balanced Plate Angle?)
+float servoOffsetX = 85.0;                        // Servopositionen bei ungeneigter Ebene 
 float servoOffsetY = 90.0;
 
 int touchX = 0, touchY = 0, touchXOld = -1, touchYOld = -1;
@@ -49,13 +51,13 @@ int TouchScreenYOffsetToMiddle = 1992;
 
 float RegelungszielX;
 float RegelungszielY;
-float ServoSprungbegrenzung = 15;                 // Idee: raduisabhängig erhöhen/verringern
+float ServoSprungbegrenzung = 10;                 // Idee: raduisabhängig erhöhen/verringern
 static float ServoAngleXRecent = 0;
 static float ServoAngleYRecent = 0;
 
 float Kb = 0;
 float Kp, KpMax = 0.24;
-float Ki, KiMax = 0.005;
+float Ki, KiMax = 0.015;
 float Kd, KdMax = 0.125;
 
 AdvancedPID PIDX(Kp, Ki, Kd, Kb);       
@@ -76,7 +78,9 @@ void setup() {
   PIDY.setOutputLimits(-45, 45);
   PIDX.setDeadband(1);  // Threshold for the error
   PIDY.setDeadband(1);
-
+  PIDX.setDerivativeFilter(0.8);
+  PIDY.setDerivativeFilter(0.8);
+ 
   Esp32LedcRegistry::instance()->begin(LEDC_CONFIG_ESP32);
   BestAvailableFactory oTimerChannelFactory;
 
@@ -109,10 +113,9 @@ void setup() {
 // BETRIEB ----------------------------------------------------------------------------------------
 void loop() {
     // Interface-Buttons auslesen und Modus setzen
-    // Refactoring-Vorschlag: hier wird immer mit "not" gearbeitet, wäre es möglich hier auch ohne "not" zu arbeiten? Was gibt denn die digitalRead-Fkt. für einen Rückgabewert?
     if (not digitalRead(PinButtonPower)) {
       mode = 0;
-      Serial.print ("Modus 1 - StandBy\n");
+      Serial.print("Modus 1 - StandBy\n");
 
       digitalWrite(PinLEDPower, HIGH);
       digitalWrite(PinLEDRegelbetrieb, LOW);
@@ -139,85 +142,39 @@ void loop() {
     case 0:
       servoAngleX = 0; // keine gerade Platte, sondern nur
       servoAngleY = 0; // Nullwinkel der Servos (-> beliebig)
-
-      // Serial.print("P-Wert:");
-      // Serial.print(Kp);
-      // Serial.print("\tI-Wert:");
-      // Serial.print(Ki);
-      // Serial.print("\tD-Wert:");
-      // Serial.print(Kd);
-      // Serial.print("\n");
-      // Serial.print("PotiP-Wert:");
-      // Serial.print(analogRead(PinPotiP));
-      // Serial.print("\tPotiI-Wert:");
-      // Serial.print(analogRead(PinPotiI));
-      // Serial.print("\tPotiD-Wert:");
-      // Serial.print(analogRead(PinPotiD));
-      // Serial.print("\n");
-
       break;
     case 1:
-      measureTouchscreenXAxis();
-      measureTouchscreenYAxis();
-      measureJoystickAngles();
-      
-      // aktuelle Reglerparameter berechnen (Potis werden ausgelesen)
-      if (every100ms < millis()) {                          // 10 mal pro Sekunde
-        every100ms = millis() + 100;       
-        Kp = (4096 -analogRead(PinPotiP)) * KpMax / 4096;   // evtl Möglichkeit finden feste Regelparameter einzustellen, z.B: Taste gedrückt halten
-        Ki = (4096 -analogRead(PinPotiI)) * KiMax / 4096;
-        Kd = (4096 -analogRead(PinPotiD)) * KdMax / 4096;   // Poti fehlt -> Ki fester Wert und Kd auf Poti ursprünglich: (4096 -analogRead(PinPotiD)) * KdMax / 4096
-      }
+      if (millis() - RecentControl >= TimerIntervall) {
+        measureTouchscreenXAxis();
+        measureTouchscreenYAxis();
+        measureJoystickAngles();
+        
+        // aktuelle Reglerparameter berechnen (Potis werden ausgelesen)
+        if (millis() - RecentPotiReading > 500) {
+          Kp = (4096 -analogRead(PinPotiP)) * KpMax / 4096;   // Mögliche Erweiterung: feste Regelparameter einstellen, z.B: Taste gedrückt halten
+          Ki = (4096 -analogRead(PinPotiI)) * KiMax / 4096;
+          Kd = (4096 -analogRead(PinPotiD)) * KdMax / 4096;   
+          PIDX.setTunings(Kp, Ki, Kd);
+          PIDY.setTunings(Kp, Ki, Kd);
+          RecentPotiReading = millis();
+        }
 
-      PIDX.setTunings(Kp, Ki, Kd);
-      PIDY.setTunings(Kp, Ki, Kd);
-      PIDX.setDerivativeFilter(0.8);
-      PIDY.setDerivativeFilter(0.8);
-      PIDX.setIntegralZone(10);               // setzt I-Anteil auf bestimmten Bereich fest
-      PIDY.setIntegralZone(10);
-      RegelungszielX = joystickAngleX * 3;    // Joystickwerte zum möglichen Verschieben des Zielpunktes
-      RegelungszielY = joystickAngleY * 3;  
+        RegelungszielX = 0;                     // Verschieben/Ändern des Zielpunktes möglich; z.B. mit: joystickAngleX * 3; joystickAngleY * 3;
+        RegelungszielY = 0;  
 
-      servoAngleX = PIDX.run(posX, RegelungszielX); // output = myPID.run(input, setpoint) bzw. abweichung = .run(istwert, führungsgröße)
-      servoAngleY = PIDY.run(posY, RegelungszielY);
-      ServoStabilisierung();                        // glättet zu starke Sprünge
-
-      Serial.print("X-Position: ");
-      Serial.print(posX);
-      Serial.print("\tServo X-Winkel:\t");
-      Serial.print(servoAngleX);
-      Serial.print("\tServo Y-Winkel: ");
-      Serial.print(servoAngleY);
-      Serial.print("\n");
-      Serial.print("X-Ziel:\t");
-      Serial.print(RegelungszielX);
-      Serial.print("\n");
-      Serial.print("Y-Ziel:\t");
-      Serial.print(RegelungszielY);
-      Serial.print("\n");
+        servoAngleX = PIDX.run(posX, RegelungszielX); // output = myPID.run(input, setpoint) bzw. abweichung = .run(istwert, führungsgröße)
+        servoAngleY = PIDY.run(posY, RegelungszielY);
+        ServoStabilisierung();                        // glättet zu starke Sprünge
+        RecentControl = millis();
+      }  
       break;
     case 2:
       measureJoystickAngles();
-
       servoAngleX = joystickAngleX * joystickAngleUseabilityScaling;
       servoAngleY = -joystickAngleY * joystickAngleUseabilityScaling;
-
-      Serial.print("Servo X-Winkel:\t");
-      Serial.print(servoAngleX);
-      Serial.print("Servo Y-Winkel:\t");
-      Serial.print(servoAngleY);
-      Serial.print("\n");
-      
-      // Serial.print("Joysitck Offset X:");
-      // Serial.print(analogRead(PinJoystickX));
-      // Serial.print("\tJoysitck Offset Y:");
-      // Serial.print(analogRead(PinJoystickY));
-      // Serial.print("\n");
-
       break;
   }
-  Serial.print("\n");
-
+  
   delay(1); // in ms
   
   servoAngleX = constrain(servoAngleX, -45, 45); // min. und max. Beschränkung der Servowinkel
@@ -242,27 +199,13 @@ void measureTouchscreenXAxis() {
 
   // Lese den Touchscreen-X-Wert aus
   touchX = analogRead(PinY1);
-  Serial.print("Touchscreen x-Position:\t");
-  Serial.print(touchX);
 
   if (abs(touchX - touchXOld) <= 100 || millis() >= touchXTimer) {  
       
     touchXTimer = millis() + 100;
     posX = (touchX - TouchScreenXOffsetToMiddle) * 0.121535; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
-    // wir möchten einen voraussichtlichen Positionsterm dazunemhmen für die Hangabtriebskraft: benötigt Kugelmass (100 g), Neigung der Ebene, Zeit zwischen Sensormessungen 
-    touchXOld = touchX; // mit Filter: (touchXOld - TouchScreenXOffsetToMiddle) * 0.121535 * 0.9 + (touchX - TouchScreenXOffsetToMiddle) * 0.121535 * 0.1
-    Serial.print("\ttouchX: ");
-    Serial.print(touchX);
-    Serial.print("\ttouchXOld: ");
-    Serial.print(touchXOld);
-    Serial.print("\ttouchXTimer: ");
-    Serial.print(touchXTimer);
-    Serial.print("\n");
+    touchXOld = touchX; 
   }
-  // Debugging
-  Serial.print("Calculated x-Position: ");
-  Serial.print(posX);
-  Serial.print("\n");
 }
 
 void measureTouchscreenYAxis() {
@@ -279,37 +222,18 @@ void measureTouchscreenYAxis() {
 
   // Lese den Touchscreen-Y-Wert aus
   touchY = analogRead(PinX1);
-  Serial.print("Touchscreen y-Position:\t");
-  Serial.print(touchY);
-  
-  if (!abs(touchY - touchYOld) <= 100 || millis() >= touchYTimer) {    
+
+  if (abs(touchY - touchYOld) <= 100 || millis() >= touchYTimer) {    
     
     touchYTimer = millis() + 100;
     posY = (touchY - TouchScreenYOffsetToMiddle) * 0.10280; // die empirischen Werte hier sollten Namen bekommen, damit man weiß was wozu gehört (ggf. auch für Anpassungen wichtig)
-    // wir möchten einen voraussichtlichen Positionsterm dazunemhmen für die Hangabtriebskraft: benötigt Kugelmass (100 g), Neigung der Ebene, Zeit zwischen Sensormessungen 
-    touchYOld = touchY; // mit Filter: (touchYOld - TouchScreenYOffsetToMiddle) * 0.10280 * 0.8 + (touchY - TouchScreenYOffsetToMiddle) * 0.10280 * 0.2
-    Serial.print("\ttouchY: ");
-    Serial.print(touchY);
-    Serial.print("\ttouchYOld: ");
-    Serial.print(touchYOld);
-    Serial.print("\ttouchYTimer: ");
-    Serial.print(touchYTimer);
-    Serial.print("\n");
+    touchYOld = touchY; 
   }
-  // Debugging
-  Serial.print("Calculated y-Position:\t");
-  Serial.print(posY);
-  Serial.print("\n");
 }
 
 void measureJoystickAngles() {
   joystickAngleX = (joystickOffsetX - analogRead(PinJoystickX)) / TranslationADCValueToJoystickAngle;
   joystickAngleY = (joystickOffsetY - analogRead(PinJoystickY)) / TranslationADCValueToJoystickAngle;
-  Serial.print("Joysitck X-Winkel: ");
-  Serial.print(joystickAngleX);
-  Serial.print("\tJoysitck Y-Winkel: ");
-  Serial.print(joystickAngleY);
-  Serial.print("\n");
 }
 
 void ServoStabilisierung() {
