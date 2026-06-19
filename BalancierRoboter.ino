@@ -25,7 +25,7 @@ using namespace MDO::ESP32ServoController;
 
 // === Systemvariablen ===
 uint8_t mode = 0;                                 // Startet in StandBy (Modus 1 von 3)
-long TimerIntervall = 20;                        // Frequenzgebende Variable
+long TimerIntervall = 20;                        // Frequenzgebende Variable T = 1/f
 long RecentControl = 0;
 long RecentPotiReading = 0; 
 
@@ -54,6 +54,9 @@ float RegelungszielY;
 float ServoSprungbegrenzung = 10;                 // Idee: raduisabhängig erhöhen/verringern
 static float ServoAngleXRecent = 0;
 static float ServoAngleYRecent = 0;
+
+bool Datenausgabe = 1;                            // Funktion für die Datenausgabe aktiv/inaktiv schaltbar
+unsigned long MessStartZeit = 0;
 
 float Kb = 0;
 float Kp, KpMax = 0.24;
@@ -123,7 +126,8 @@ void loop() {
     }
     if (not digitalRead(PinButtonRegelbetrieb)) {
       mode = 1;
-      Serial.print ("Modus 2 - Regelbetrieb\n");
+      //Serial.print ("Modus 2 - Regelbetrieb\n");
+      MessStartZeit = millis();
 
       digitalWrite(PinLEDPower, LOW);
       digitalWrite(PinLEDRegelbetrieb, HIGH);
@@ -144,6 +148,7 @@ void loop() {
       servoAngleY = 0; // Nullwinkel der Servos (-> beliebig)
       break;
     case 1:
+      
       if (millis() - RecentControl >= TimerIntervall) {
         measureTouchscreenXAxis();
         measureTouchscreenYAxis();
@@ -167,6 +172,10 @@ void loop() {
         ServoStabilisierung();                        // glättet zu starke Sprünge
         RecentControl = millis();
       }  
+      if(Datenausgabe = 1) {
+
+        Datenabruf();
+      }
       break;
     case 2:
       measureJoystickAngles();
@@ -250,4 +259,37 @@ void ServoStabilisierung() {
   ServoAngleYRecent = ServoAngleYRecent + AngleDiffY;
   servoAngleX = ServoAngleXRecent;
   servoAngleY = ServoAngleYRecent;
+}
+
+void PunktZuKomma(float Wert) {
+
+  String Komma_Wert = String(Wert);
+  Komma_Wert.replace(".", ",");
+  Serial.print(Komma_Wert);
+  Serial.print("\t");
+}
+
+void Datenabruf() {
+
+  Serial.print(millis() - MessStartZeit);
+  Serial.print("\t");
+
+  PunktZuKomma(posX);
+    
+  PunktZuKomma(posY);
+  
+  PunktZuKomma(RegelungszielX);
+  
+  PunktZuKomma(RegelungszielY);
+ 
+  PunktZuKomma(servoAngleX);
+  
+  PunktZuKomma(servoAngleY);
+  
+  PunktZuKomma(Kp);
+  
+  PunktZuKomma(Ki);
+  
+  PunktZuKomma(Kd);
+  Serial.print("\n");
 }
